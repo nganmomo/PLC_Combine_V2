@@ -1,0 +1,4 @@
+arduino-libraries/NTPClient@^3.2.1
+knolleary/PubSubClient@^2.8
+terrorsl/sMQTTBroker@^0.1.6
+ottowinter/AsyncMqttClient-esphome@^0.8.6

@@ -556,14 +556,17 @@ void setup(){
     }
   else
     {
-      #ifdef  BYPASSSETUP
-      const char* ssid = "ATT3jl8Tns";
-      const char* password = "6mrk8iyf26vn";
-      WiFi.begin(ssid,password);
-      #else
+      //#ifdef  BYPASSSETUP
+      const char* MYSSID = "ATT3jl8Tns";
+      const char* MYPASSWORD = "6mrk8iyf26vn";
+      MYSSID.toCharArray(mssid,MYSSID.length());
+      MYPASSWORD.toCharArray(mpass,MYPASSWORD.length()); 
+      eerpassid(eessid,mssid,mpass);  
+      //WiFi.begin(ssid,password);
+      //#else
       //no setup auto start will store ssid and pws// 
       eerpassid(eessid,mssid,mpass);         
-      #endif
+      //#endif
     }   
   #ifdef    MQTTACTIVE       
     getdata(1,6,EPLCMQTT);

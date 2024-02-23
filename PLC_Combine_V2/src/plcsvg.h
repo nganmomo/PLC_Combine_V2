@@ -10,7 +10,7 @@
 #define MQTTACTIVE
 //#define SWITCHTOBROKER
 //*******************************//
-//#define BYPASSSETUP
+#define BYPASSSETUP
 //#define CreateUnicode
 #define CheckUnicode    //software lock security
 //*******************************//

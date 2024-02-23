@@ -556,23 +556,23 @@ void setup(){
     }
   else
     {
-      #ifdef  BYPASSSETUP
+    #ifdef  BYPASSSETUP
       const char* ssid = "ATT3jl8Tns";
       const char* password = "6mrk8iyf26vn";
       WiFi.begin(ssid,password);
-      #else
+    #else
       //no setup auto start will store ssid and pws// 
       eerpassid(eessid,mssid,mpass);         
-      #endif
+    #endif
     }   
-  #ifdef    MQTTACTIVE       
+  //#ifdef    MQTTACTIVE       
     getdata(1,6,EPLCMQTT);
     getdata(2,6,EPHMQTT); 
     if(EPHMQTT[0]=='1'|| EPLCMQTT[0]=='1')
       clientsetup(1);
     else                
       clientsetup(0);//
-  #endif     
+  //#endif     
   while(wificonnected==0) 
   {Serial.print('.');
   if(connectcount++>512)

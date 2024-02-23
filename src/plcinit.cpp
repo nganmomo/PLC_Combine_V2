@@ -648,7 +648,7 @@ void HandleDevice(byte type,byte x,byte y,uint32_t realtimeloop)
     }
     break;
   case  43:       //Relay    check type before and get direct state for type before        
-    anastate[netnum[x][y]]=0;   
+    anastate[netnum[x][y]]=0;   //analog =0;
     if(digstate[netnum[x][y]]==1)    
       {BoxState[x][y].DeviceState=ON;       
       outstatus[pin]=1; //enable hardware output                                   
@@ -678,8 +678,20 @@ void HandleDevice(byte type,byte x,byte y,uint32_t realtimeloop)
         }
       }  
       break;   
-  case  44: //MQTT TX  
-    txtopic=dataz2[x][y]-1;        
+  case  44: //MQTT TX 
+      if((realtimeloop&0xfff)==0xfff)
+      {SetAnaValue(txtopic,dataz1[x][y],anastate[netnum[x][y]]);               
+      targetpin=dataz1[x][y];  
+        if(digstate[netnum[x][y]]==1)          
+          TxIOpinit[txtopic][targetpin-1]=1;                  
+        else         
+          TxIOpinit[txtopic][targetpin-1]=0;          
+      mqttuprdate=1;    
+      clientTXStatus[txtopic]=1;            
+      }
+      break;                  
+  case  144: //MQTT TX  
+    txtopic=dataz2[x][y]-1;               
     if(dataz0[x-1][y]==25 && (dataz3[x][y+1]&8)==8 && digstate[netnum[x][y+1]]==1)  //analog in             
       {SetAnaValue(txtopic,dataz1[x][y],anastate[netnum[x][y]]);  
       mqttuprdate=1;    

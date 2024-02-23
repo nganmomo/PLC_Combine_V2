@@ -155,8 +155,8 @@ var xhtp = new XMLHttpRequest();
     }   
   }  
   console.log("txdata=",txdata);  
-  URL=window.location.host; 
-  //URL="192.168.1.84:8088"
+  //URL=window.location.host; 
+  URL="192.168.1.95:8088"
   let t=0;
   let Txdata="";
   let L=txdata.length;
@@ -307,9 +307,9 @@ syssetup=
 <h3>For ESP32 broker encryted all PLC modules, include borker, must use same 'ECODE' code.</h3>\
 <h3 id='uph'>If any data is changed, the HARDWARE RESET key must be pressed to take effect.</h3>"
 
-
+var effectivetopic="";
 function EffectTopic()
-{let effectivetopic="";
+{
 for(let t=2;t<ysetdev-1;t++)  
   {if(document.getElementById('radio'+t).checked===true)
     effectivetopic='P'+systcell[1][1]+systcell[0][t];

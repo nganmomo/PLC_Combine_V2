@@ -278,7 +278,7 @@ function checksyntax(lookup,x,y)
             case  2:  
             case  3:
             case  4: 
-                  let testarray14=[4,8,16,23,24,25,26,28,29,30,36,37,38,39,40,41,42,44,45,46,47,48,49,50,55,60,62];  
+                  let testarray14=[2,4,8,16,23,24,25,26,28,29,30,36,37,38,39,40,41,42,44,45,46,47,48,50,55,60,62];  
                   for(tv=0;tv<testarray14.length;tv++)  
                     {if(testarray14[tv]===lookup)
                       {isexit=0;
@@ -287,7 +287,7 @@ function checksyntax(lookup,x,y)
                     }                   
                   break;                                            
             case  5:
-              let testarray5=[43,49,24,55];  
+              let testarray5=[2,43,49,24,55,44,46];  
               for(tv=0;tv<testarray5.length;tv++)  
                 {if(testarray5[tv]===lookup)
                   {isexit=0;
@@ -296,7 +296,7 @@ function checksyntax(lookup,x,y)
                 }                
                 break;                                            
             case  1:   //not allow in column 1                                 
-              let testarray1=[8,37,38,39,41,44,46,48];
+              let testarray1=[8,37,38,39,41,47,48];
               for(tv=0;tv<testarray1.length;tv++)  
                 {if(testarray1[tv]===lookup)
                   {isexit=1;
@@ -307,7 +307,7 @@ function checksyntax(lookup,x,y)
             }           
           }                                             
     if(isexit===1 && lookup!=80)        
-      window.alert("Not allow to put in this column");   
+      window.alert("Not allow to put this in this column\nerror code "+lookup);   
     if(lookup===80) isexit=0;
     if((!(lookup>=37 && lookup<=39) || lookup===42 || lookup===48) && serialcelldata[x*8+(y+1)*48+3]===8)
         serialcelldata[x*8+(y+1)*48+3]=0;                                        
@@ -352,10 +352,10 @@ else
             {let typebefore=0;
             if(x>0)
               typebefore=serialcelldata[(x-1)*8+y*48];
-            if((typeused[typebefore]&1)!=1)          
-              {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
-              error++;
-              }
+            //if((typeused[typebefore]&1)!=1)          
+            //  {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
+            //  error++;
+            //  }
             }
           switch (type)
           {

@@ -342,7 +342,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
 
 void starthttpServer(){
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-  config.max_open_sockets = 3;
+  config.max_open_sockets = 10;
   config.max_uri_handlers = 14;
   config.server_port = 8088;
   httpd_uri_t index_uri = {

@@ -6,25 +6,25 @@ static const char PROGMEM INDEX_HTML_homehw[] = R"rawliteral(
 
 <!--Begin of selection -->
 <!--
-<link rel="icon" type="image/x-icon" href="http://ipcworld.online/plcweb/views/image/favicon.ico">
-<script src="http://ipcworld.online/plcweb/icontext.js"></script>  
-<script src="http://ipcworld.online/plcweb/svgplccell.js"></script>    
-<script src="http://ipcworld.online/plcweb/Property.js"></script> 
-<script src="http://ipcworld.online/plcweb/Linkhardware.js"></script>
-<script src="http://ipcworld.online/plcweb/helppopup.js"></script> 
-<link rel="stylesheet" href="http://ipcworld.online/plcweb/css/plcsvg.css">      
+<link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/icontext.js"></script>  
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/svgplccell.js"></script>    
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Property.js"></script> 
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Linkhardware.js"></script>
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/helppopup.js"></script> 
+<link rel="stylesheet" href="https://ipcworld.w3spaces.com/SVGPLC/PLC/css/plcsvg.css">      
 -->
 <!--
-<link href='http://ipcworld.online/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
+<link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
 <script src="icontext.js"></script> 
 <script src="svgplccell.js"></script>     
 <script src="Property.js"></script>    
 <script src="Linkhardware.js"></script>   
 <script src="helppopup.js"></script>      
-<link rel="stylesheet" href="css/plcsvg.css">  
+<link rel="stylesheet" href="css/plcsvg.css"> 
 -->
 
-<link href='http://ipcworld.online/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
+<link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
 <script src="icontext"></script> 
 <script src="svgplccell"></script>     
 <script src="Property"></script>    

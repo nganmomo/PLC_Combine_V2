@@ -76,7 +76,7 @@ svgtext="";
                     svgtext=svgt+UserDefIn[x]+"</text>"
                     break;
                   case 47:
-                    svgtext=svgt+Joblookup[x]+"</text>"
+                    svgtext=svgt+UserDefIn[x]+"</text>"
                     break;                  
                   case 51:
                   case 52:
@@ -117,6 +117,8 @@ svgtext="";
             else
               {if(type===23) 
                 svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+outtype[x]+"</text>"; 
+              else if(type===46 || type===47)
+                svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+MODtype[x]+"</text>";      
               else if(type===60)
                 svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+y16+"</text>";            
               else if(type===38 || type===41 || type===42)
@@ -204,11 +206,11 @@ function clearfile()
 }
   var selectend="</select><br>";   
   var RTimerlookup=['ks','ks','sec','ms'];
-  var outtype=['Non invert','Non invert','Invert','Active ON-Front','Active ON Rear','Active OFF-Front','Active OFF-Rear'];  
+  var outtype=['Non invert','Non invert','Invert','Active ON-Front','Active ON Rear','Active OFF-Front','Active OFF-Rear'];
+  var MODtype=['MOD1','MOD2','MOD3','MOD4','MOD5','MOD6','MOD7','MOD8'];  
   var Countlookup=['Active ON slow','Active ON slow','Active ON fast','Active OFF slow','Active OFF fast','rise pulse slow','rise pulse fast'];
-  var timerdelaytype=['Active OFF sec','Active OFF sec','Active OFF ms','Active ON sec','Active ON ms','Delay Active OFF sec','Delay Active OFF ms','Delay Active ON sec','Delay Active ON ms','Delay Pulse sec','Delay Pulse ms'];
-  var Joblookup=['Select','Job1','Job2','Job3','Job4','Job5','Job6','Job7','Job8','Job9','Job10','Job11','Job12'];
-  var UserDefIn=['Polling','Polling','Interrupt'];
+  var timerdelaytype=['Active OFF sec','Active OFF sec','Active OFF ms','Active ON sec','Active ON ms','Delay Active OFF sec','Delay Active OFF ms','Delay Active ON sec','Delay Active ON ms','Delay Pulse sec','Delay Pulse ms']; 
+  var UserDefIn=['Digital','Analog','Mem16','Mem32','Mem64'];
   var AMathlookup=['ASW-N','ASW-N','ASW-R','A+B','A-B','B-A','AxB','A/B','B/A'];
   var phonecol=['A','A','B','C','D','E'];
   var phonerow=['1','1','2','3','4','5','6','7','8'];
@@ -218,10 +220,10 @@ function clearfile()
     "Counter","RSFF ","DAC","ADC","CMP","Pin","MqttTx","MqttRx","UserTx","UserRx","Math","Group","COL","51","52","53","54","COL","","57","58","59","RTimer ","","Clock "];
   var lookup2table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','RLY','4','5','val','Return','8','9','Din','1','2','3','4','5','16','Mode/Unit','Mode','0=Forever(sec)',
-    'Step','Ref','L-H:','Pin use','To-Topic','RxTopic','Job No.:','7','Mode','Mode','ROW','Row','52','53','54','ROW','Mode','57','58','59','Mode','','activated'];
+    'Step','Ref','L-H:','Pin use','To-Topic','RxTopic','TYPE','TYPE','Mode','Mode','ROW','Row','52','53','54','ROW','Mode','57','58','59','Mode','','activated'];
   var lookup4table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','Link Type','4','5','6','7','8','9','30','1','2','3','4','5','6','Time Set','Clock set','0=Forever(sec)',
-    'Offset','H-L','H-L','43','MqttRx','RxType','Argument','7','value','if<','TYPE','','','','','55','','','','59','Time Set'];
+    'Offset','H-L','H-L','43','MqttRx','RxType','Modbus Address','Modbus Address','value','if<','TYPE','','','','','55','','','','59','Time Set'];
   var lookup6table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','ModeB','4','5','6','7','8','9','30','1','2','3','4','5','6','Time Set(Sec)','Clock set','0=Forever(sec)','40','LOW','LOW','3','Topic','Topic','6','7','Value','Echo','10']; 
   var sdata="";  
@@ -243,6 +245,7 @@ function clearfile()
     var id2num=iddlookup[serialcelldata[yy*48+xx*8+2]>>8]+type;//see iddlookup
     var id4num=iddlookup[serialcelldata[yy*48+xx*8+4]>>8]+type;//see iddlookup
     var id4type=outtype[serialcelldata[yy*48+xx*8+4]>>8]; 
+    var id4MOD=MODtype[serialcelldata[yy*48+xx*8+4]>>8]; 
     if(type===45 && id2num<256) id2num=256+type;
     var id1numnotype=serialcelldata[yy*48+xx*8+1]>>8;
     var id2numnotype=serialcelldata[yy*48+xx*8+2]>>8;
@@ -303,7 +306,15 @@ function clearfile()
         <option value='"+(512+type)+"'>"+outtype[2]+"</option>\
         <option value='"+(768+type)+"'>"+outtype[3]+"</option>\
         <option value='"+(1024+type)+"'>"+outtype[4]+"</option>"      
+    
+    var linkMODtype=
+        "<label>Id:</label>\
+          <option value='"+(256+type)+"'>"+MODtype[1]+"</option>\
+          <option value='"+(512+type)+"'>"+MODtype[2]+"</option>\
+          <option value='"+(768+type)+"'>"+MODtype[3]+"</option>\
+          <option value='"+(1024+type)+"'>"+MODtype[4]+"</option>"        
         
+
     var Unit=
     "<label>"+lookup2table[type]+":</label>\
     <select id='unit' value="+id2numnotype+">\
@@ -320,30 +331,18 @@ function clearfile()
     <option value='"+(2560+type)+"'>"+timerdelaytype[10]+"</option>\
     </select><br>"    
     
-    var UserDefineIn=
+    var UserDefineOut=
     "<label>"+lookup2table[type]+":</label>\
     <select id='userdefine' value="+id2numnotype+">\
     <option value='"+id2num+"'>"+UserDefIn[id2numnotype]+"</option>\
     <option value='"+(256+type)+"'>"+UserDefIn[1]+"</option>\
     <option value='"+(512+type)+"'>"+UserDefIn[2]+"</option>\
+    <option value='"+(768+type)+"'>"+UserDefIn[3]+"</option>\
+    <option value='"+(1024+type)+"'>"+UserDefIn[4]+"</option>\
     </select><br>"    
 
-    var UserDefine=
-    "<label>"+lookup2table[type]+":</label>\
-    <select id='userdefine' value="+id2numnotype+">\
-    <option value='"+id2num+"'>"+Joblookup[id2numnotype]+"</option>\
-    <option value='"+(256+type)+"'>"+Joblookup[1]+"</option>\
-    <option value='"+(512+type)+"'>"+Joblookup[2]+"</option>\
-    <option value='"+(768+type)+"'>"+Joblookup[3]+"</option>\
-    <option value='"+(1024+type)+"'>"+Joblookup[4]+"</option>\
-    <option value='"+(1280+type)+"'>"+Joblookup[5]+"</option>\
-    <option value='"+(1536+type)+"'>"+Joblookup[6]+"</option>\
-    <option value='"+(1792+type)+"'>"+Joblookup[7]+"</option>\
-    <option value='"+(2048+type)+"'>"+Joblookup[8]+"</option>\
-    <option value='"+(2304+type)+"'>"+Joblookup[9]+"</option>\
-    <option value='"+(2560+type)+"'>"+Joblookup[10]+"</option>\
-    </select><br>"    
-
+    var UserDefineIn=UserDefineOut;
+    
     var RTimer=
     "<select id='rtimer' value="+id2numnotype+">\
     <option value='"+id2num+"'>"+RTimerlookup[id2numnotype]+"</option>\
@@ -397,6 +396,11 @@ function clearfile()
     <option value='"+(1280+type)+"'>"+phonecol[5]+"</option>\
     </select><br>"  
            
+    var SelMod4=
+    "<label>"+lookup4table[type]+":</label>\
+    <select id='outmode' value="+id4MOD+">\
+    <option value='"+id4num+"'>"+id4MOD+"</option>"+linkMODtype+selectend;   
+    
     var Select4=
     "<label>"+lookup4table[type]+":</label>\
     <select id='outmode' value="+id4type+">\
@@ -470,8 +474,8 @@ function clearfile()
     if(type===43)   sdata=menuidst+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;  
     if(type===44)   sdata=autoidstdigital+SelectTopic+"<h7>Topic should match RX Topic</h7><br>"+commnest+endst;                 //MQTT in
     if(type===45)   sdata=autoidstdigital+"<h7>RX topic set in Mqtt setup</h7><br>"+commnest+"<br>"+endst;               //MQTT out    
-    if(type===46)   sdata=autoidstdigital+UserDefineIn+hlst4+commnest+endst;            //USER in
-    if(type===47)   sdata=autoidstdigital+UserDefine+commnest+endst;                  //USER out
+    if(type===46)   sdata=autoidstdigital+UserDefineOut+SelMod4+commnest+endst;            //USER in
+    if(type===47)   sdata=autoidstdigital+UserDefineIn+SelMod4+commnest+endst;                  //USER out
     if(type===48)   sdata=autoidstdigital+AMath+"<br>"+commnest+endst;                //math out
     if(type===49)   sdata=autoidstdigital+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;                      //relay
     if(type===50)   sdata=KeySel+phoneRowIn+phin+commnest+"<br>"+endst;               //phone in 
@@ -613,12 +617,12 @@ function closePopup(type,xx,yy) {
           break;             
     }
     updataonecell(2,xx,yy,val2);
-    if(type===23) //select item
+    if(type===23 || type===46 || type===47)  //select item
       {val4 = document.getElementById('outmode').value;            
       if(val4<200) val4="256";
       updataonecell(4,xx,yy,val4);  //show text     
       }
-    if(type===37|| type===60 || type===38 || type===41 || type===42 || type===46)  //A/D convert
+    if(type===37|| type===60 || type===38 || type===41 || type===42)  //A/D convert
     {val4 = document.getElementById('thst4').value;           
     if(val4===null) val4=1;
     updataonecell(4,xx,yy,val4);  //show text   

@@ -352,10 +352,10 @@ else
             {let typebefore=0;
             if(x>0)
               typebefore=serialcelldata[(x-1)*8+y*48];
-            if((typeused[typebefore]&1)!=1)          
-              {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
-              error++;
-              }
+            //if((typeused[typebefore]&1)!=1)          
+            //  {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
+            //  error++;
+            //  }
             }
           switch (type)
           {

@@ -158,7 +158,11 @@ void connectToWifi()
 //if((WiFi.status() != WL_CONNECTED))
   {Serial.println("Connect to Mqtt with encrypt"); 
   WiFi.mode(WIFI_STA);
+#ifdef  BYPASSSETUP 
+  WiFi.begin("ATT3jl8Tns","6mrk8iyf26vn");
+#else
   WiFi.begin(&mssid[0],&mpass[0]);
+#endif 
   }
 }
 

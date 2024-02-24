@@ -554,17 +554,8 @@ void setup(){
     //while (!Serial.available());
     while (digitalRead(setuppin)==SETUPSTATE);
     }
-  else
-    {
-    #ifdef  BYPASSSETUP
-      const char* ssid = "ATT3jl8Tns";
-      const char* password = "6mrk8iyf26vn";
-      WiFi.begin(ssid,password);
-    #else
-      //no setup auto start will store ssid and pws// 
-      eerpassid(eessid,mssid,mpass);         
-    #endif
-    }   
+  else    
+    eerpassid(eessid,mssid,mpass);                    
   //#ifdef    MQTTACTIVE       
     getdata(1,6,EPLCMQTT);
     getdata(2,6,EPHMQTT); 

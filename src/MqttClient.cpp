@@ -43,7 +43,11 @@ void connectToWifi() {
   // Serial.println("Configuration failed.");
   //}
 //////////////////// 
+#ifdef  BYPASSSETUP 
+  WiFi.begin("ATT3jl8Tns","6mrk8iyf26vn");
+#else
   WiFi.begin(&mssid[0],&mpass[0]);
+#endif
 }
 
 void connectToMqtt() {

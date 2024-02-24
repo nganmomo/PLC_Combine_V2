@@ -61,10 +61,14 @@ byte RxIOpinit[9];
 int GetAnaValue(byte port)
 {int value;
 value=RxAnaValue[port][1]*100+RxAnaValue[port][2]*10+RxAnaValue[port][3]; 
-if(port!=RxAnaValue[port][0]) //port match
-value=999;
-//Serial.print("value");
-//Serial.print(value);
+Serial.print("value=");
+Serial.println(value);
+//if(port!=RxAnaValue[port][0]) //port match
+//value=999;
+//Serial.print("Port=");
+//Serial.println(port);
+//Serial.print("valuePort");
+//Serial.println(RxAnaValue[port][0]);
 return value;
 }
 
@@ -172,7 +176,8 @@ rwswiches(readwrite); //read hardware switches;
 if((realtimeloop&0x1fff)==0x1fff && mqttuprdate==1 && mqtten==1)   //mqtten mqtt sw
   {for(byte ct=0;ct<4;ct++)
     {if(clientTXStatus[ct]>0)
-      {clientTX(ct);       
+      {clientTX(ct);    
+      //Serial.println("txtest1");   
       clientTXStatus[ct]=0; 
       }
     }
@@ -313,10 +318,14 @@ for(x=0;x<xcount;x++)
                 }   
               }                 
             break;                   
-          case  45:           //MQTT from user for API phone also, 
-            if((realtimeloop&0xff)==0xff)                  
+          case  45:           //MQTT from user for API phone also,                 
+            if((realtimeloop&0xfff)==0xfff)                  
             {byte targetpin=dataz1[x][y];               
             int avalue=GetAnaValue(targetpin);                      
+            //Serial.print("targetpin="); 
+            //Serial.println(targetpin); 
+            //Serial.print("avalue="); 
+            //Serial.println(avalue); 
             if(avalue<256)
               {anastate[netnum[x+1][y]]=GetAnaValue(targetpin);  //analog
               }
@@ -680,8 +689,13 @@ void HandleDevice(byte type,byte x,byte y,uint32_t realtimeloop)
       break;   
   case  44: //MQTT TX 
       if((realtimeloop&0xfff)==0xfff)
-      {SetAnaValue(txtopic,dataz1[x][y],anastate[netnum[x][y]]);               
-      targetpin=dataz1[x][y];  
+      {txtopic=dataz2[x][y]-1;       
+      if(txtopic<0 || txtopic>4) 
+        txtopic=0;                
+      //Serial.print("txtopic=");   
+      //Serial.println(txtopic);   
+      SetAnaValue(txtopic,dataz1[x][y],anastate[netnum[x][y]]);               
+        targetpin=dataz1[x][y];  
         if(digstate[netnum[x][y]]==1)          
           TxIOpinit[txtopic][targetpin-1]=1;                  
         else         

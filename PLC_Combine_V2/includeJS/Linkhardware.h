@@ -244,7 +244,11 @@ else
     updatetable(FILLALL);       
     timeoutmessage="Hareware will not keep comment, Please use file to keep comment\n download successful";           
     document.getElementById('labelul').style.backgroundColor="#333333";
-    }          
+    }  
+  else
+    {
+    window.alert("Please set time clock and try again"); 
+    }            
   }  
 } 
 

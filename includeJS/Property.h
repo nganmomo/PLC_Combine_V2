@@ -219,7 +219,7 @@ function clearfile()
     '1','2',"Link ","Aout","Ain","CON","Din","Din","Din","Din","Din","Din","Din","Din","Din","Din","Timer",
     "Counter","RSFF ","DAC","ADC","CMP","Pin","MqttTx","MqttRx","UserTx","UserRx","Math","Group","COL","51","52","53","54","COL","","57","58","59","RTimer ","","Clock "];
   var lookup2table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
-    '1','2','RLY','4','5','val','Return','8','9','Din','1','2','3','4','5','16','Mode/Unit','Mode','0=Forever(sec)',
+    '1','2','RLY','4','AIN','val','Return','8','9','Din','1','2','3','4','5','16','Mode/Unit','Mode','0=Forever(sec)',
     'Step','Ref','L-H:','Pin use','To-Topic','RxTopic','TYPE','TYPE','Mode','Mode','ROW','Row','52','53','54','ROW','Mode','57','58','59','Mode','','activated'];
   var lookup4table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','Link Type','4','5','6','7','8','9','30','1','2','3','4','5','6','Time Set','Clock set','0=Forever(sec)',
@@ -447,8 +447,10 @@ function clearfile()
     /////////////////////////////////  
     var autoidstdigital="<label>ID:</label><select id='autoidstdigital' value="+id1type+">\
     <option value='"+id1num+"'>Auto</option>selecttable1+selectend;"+selecttable1+selectend; 
+    //change to selecttable1 from selecttable2
     var autoidstanalog="<label>ID:</label><select id='autoidstdigital' value="+id1type+">\
-    <option value='"+id1num+"'>Auto</option>selecttable1+selectend;"+selecttable2+selectend; 
+    <option value='"+id1num+"'>Auto</option>selecttable1+selectend;"+selecttable1+selectend; 
+    
     var menuidst="<label>ID:</label><select id='menuidst' value="+id1type+">\
     <option value='"+id1num+"'>"+id1type+"</option>selecttable1+selectend;"+selecttable1+selectend;    
     var hlst2=   

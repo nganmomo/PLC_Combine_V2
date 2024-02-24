@@ -61,14 +61,14 @@ byte RxIOpinit[9];
 int GetAnaValue(byte port)
 {int value;
 value=RxAnaValue[port][1]*100+RxAnaValue[port][2]*10+RxAnaValue[port][3]; 
-Serial.print("value=");
-Serial.println(value);
-//if(port!=RxAnaValue[port][0]) //port match
-//value=999;
+//Serial.print("value=");
+//Serial.println(value);
+if(port!=RxAnaValue[port][0]+1) //port match
+  value=999;
 //Serial.print("Port=");
 //Serial.println(port);
 //Serial.print("valuePort");
-//Serial.println(RxAnaValue[port][0]);
+//Serial.println(RxAnaValue[port][0]+1);
 return value;
 }
 

@@ -4,6 +4,7 @@
 #ifdef wssencode
 char phonetopic[60];
 char mqtt_port_char[6];
+char ISMASTER[5]; 
 char MYTOPIC[5][64];  // = "mytopic2";
 char ECODE[40];  
 char EnECODE[2]; 
@@ -122,8 +123,17 @@ mqtt_username=MUSERID;
 mqtt_password=MPASSWORD; 
 mqtt_port=(mqtt_port_char[0]-0x30)*1000+(mqtt_port_char[1]-0x30) //??
     *100+(mqtt_port_char[2]-0x30)*10+(mqtt_port_char[3]-0x30);  
-Serial.print("This PLC assigned=");  
-  for(int t=0;t<6;t++)       
+Serial.print("This PLC assigned as= ");  
+getdata(3,1,ISMASTER);     
+if(ISMASTER[1]=='0')  
+  Serial.println("MASTER"); 
+if(ISMASTER[1]=='1')  
+  Serial.println("SLAVE A");   
+if(ISMASTER[1]=='2')  
+  Serial.println("SLAVE B");   
+if(ISMASTER[1]=='3')  
+  Serial.println("SLAVE C");      
+  for(int t=1;t<6;t++)       
     {if(t==5) 
       {Serial.print("This Phone assigned=");  
       Serial.println(phonetopic);  
@@ -131,8 +141,8 @@ Serial.print("This PLC assigned=");
     else
       {getdata(0,t+1,&MYTOPIC[t][0]);    
       Serial.println(&MYTOPIC[t][0]);         
-      }
-    }      
+      }   
+    }             
   randomSeed(micros());
   while (!Serial) delay(1);
   if(wssenable)
@@ -254,13 +264,13 @@ for(unsigned int i = 0; i < len; i++)
 if(topic[0]=='P')   //PLC
   {byte t,j;
   byte y=0;  
-  //pass mqtt status to plcinit.cpp case 45//
+  //pass mqtt status to plcinit.cpp case 45//  
   for(t=1;t<=8;t++)    //2D array to 1D array
     {for(j=0;j<4;j++)
-      RxAnaValue[t][j]=payload[y++]-0x30;             
-    }  
+      RxAnaValue[t][j]=payload[y++]-0x30;                               
+    }    
   for(t=1;t<=8;t++)    
-    RxIOpinit[t]=payload[y++]-0x30; //and cnange to ascii  
+    RxIOpinit[t]=payload[y++]-0x30; //and change to ascii  
   }
   //pass mqtt status to plcinit.cpp case 45//
 if(topic[0]=='T')   //for Mqtt phone

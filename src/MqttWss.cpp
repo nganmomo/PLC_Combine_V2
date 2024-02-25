@@ -259,8 +259,8 @@ void callback(char* topic, byte* payload, unsigned int len) {
 char chars[200];
 for(unsigned int i = 0; i < len; i++)
   chars[i] = (char)payload[i];
-//Serial.print("payload=");
-//Serial.println(chars);     
+Serial.print("callback=");
+Serial.println(chars);     
 if(topic[0]=='P')   //PLC
   {byte t,j;
   byte y=0;  
@@ -308,6 +308,7 @@ void onMqttConnect() {
   mqttconnected=1;
   Serial.println("Connected to MQTT.");
   char str[100];
+  char pstr[100];
   char tstr[100];  
   str[0]='P';//PLC
   str[1]='\0';
@@ -315,13 +316,22 @@ void onMqttConnect() {
   tstr[1]='\0';    
   //if(EPLCMQTT[0]=='1')
     strcat(str, ECODE);
-  strcat(str, &MYTOPIC[0][0]);
+  strcat(str, &MYTOPIC[0][0]); //add broker
   Serial.print("PLC subscribe:");
   Serial.println(str);
   if(wssenable)
     client_s.subscribe(str); 
-  else
-    client.subscribe(str);       
+  else  
+      {strcat(str, &MYTOPIC[0][0]); //add broker                      
+      for(int t=1;t<=4;t++)
+        {strcpy(pstr,"");
+        strcat(pstr,str);
+        strcat(pstr,&MYTOPIC[t][0]);                       
+        client.subscribe(pstr);
+        Serial.println(pstr); 
+        strcpy(pstr,"");    
+        }
+      }
   strcat(tstr,phonetopic);
   Serial.print("Phone subscribe Topic:");
   Serial.println(tstr);
@@ -372,7 +382,7 @@ byte txrequired=0;  //if no change bypass tx;
 char pay_load[41];
 if(EPLCMQTT[0]=='1')
   {for(t=0;t<8;t++)    //2D array to 1D array
-    {for(j=0;j<4;j++)
+    {for(j=0;j<4;j++)       //prepare analog
       {pay_load[y++]=TxAnaValue[topic][t][j];         
       if(TxAnaValue[topic][t][j]!=lastTxAnaValue[topic][t][j])
         {txrequired=1;
@@ -380,7 +390,7 @@ if(EPLCMQTT[0]=='1')
         }
       }
     }  
-    for(t=0;t<8;t++)    
+    for(t=0;t<8;t++)        //prepare digital
     {pay_load[y++]=TxIOpinit[topic][t]; //and cnange to ascii
     if(TxIOpinit[topic][t]!=lastTxIOpinit[topic][t])
       {txrequired=1;
@@ -397,8 +407,8 @@ if(EPLCMQTT[0]=='1')
       if(EnECODE[0]=='1')
         strcat(str, ECODE);               
       strcat(str, &MYTOPIC[topic+1][0]);
-      //Serial.print("str=");
-      //Serial.println(str);   
+      Serial.print("pay_load=");
+      Serial.println(pay_load);   
       if(wssenable)    
         client_s.publish(str,pay_load,true);                            
       else

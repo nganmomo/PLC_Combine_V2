@@ -15,8 +15,8 @@ function sysloadinitdata(){
 console.log('cd0',systcell);   
   //localStorage.clear(); //all items
   //localStorage.removeItem('systcell');
-  var np = ['SERVER','LocalTopic','PublicTopic A','PublicTopic B','PublicTopic C','PublicTopic D','Phone Topic  '];
-  var pp = ['PORT','ECODE','**Subscribe Topic','**Subscribe Topic','**Subscribe Topic','**Subscribe Topic'];
+  var np = ['SERVER','LocalTopic','MASTER TOPIC','SLAVE TOPIC A','SLAVE TOPIC C','SLAVE TOPIC B','SLAVE TOPIC C'];
+  var pp = ['PORT','ECODE','* Subscribe Master','*Subscribe Slave A','*Subscribe Slave B','*Subscribe Slave C'];
   var dp1 = ['ID','Qos','Refresh','Refresh','Refresh','Refresh'];
   var dp2 = ['PW','Refresh period','Refresh period','Refresh period','Refresh period','Refresh period'];  
   for(let t=0;t<ysetdev;t++)                                       
@@ -286,23 +286,26 @@ syssetup=
 </tr><tr id='myDRow3'></tr><tr id='myDRow4'></tr><tr id='myDRow5'></tr><tr id='myDRow6'></tr>\
 </tbody>\
 </table>\
+<h3 style='display:inline'> If set slave, copy master ECODE to slave to make both equal</h3><br>\
 <br>\
 <button type='button' onclick='Localdefault(3)' style='margin-left:50px' >HIVEMQ WSS(Phone)</button>\
+<h3 style='display:inline'> Use for WSS mqtt</h3><br>\
 <button type='button' onclick='Localdefault(1)' style='margin-left:50px' >#Simple HIVEMQ</button>\
+<h3 style='display:inline'> Use for Simple mqtt without password and use ID</h3><br>\
 <button type='button' onclick='Localdefault(2)' style='margin-left:50px' >#Local Broker</button>\
-<button type='button' id='upl' onclick='UploadsetupMqsu()' style='margin-left:100px'>Upload setup</button><br>\
-//<br><button type='button' onclick='EffectTopic()' style='margin-left:250px' >Effective Topic</button>\
+<h3 style='display:inline'> Use for Simple local mqtt broker without password and use ID</h3><br><br>\
+<button type='button' id='upl' onclick='UploadsetupMqsu()' style='margin-left:700px'>Upload setup</button><br>\
+<br><button type='button' onclick='EffectTopic()' style='margin-left:100px' >Effective Topic</button>\
 <h3 id='testNet' style='display:inline;margin-left:100px'></h3>\
 <style>input{\
   background: rgb(161, 154, 154);\
   text-align: center;}\
 </style>\
-<h3><label type='text' id='efftopic'></label></h3>\
+<h3 style='display:inline'><label type='text' id='efftopic'></label></h3>\
 <h3>##If use MQTT broker encrypt, password and user ID must set, select HIVEMQ to get default setting</h3>\
 <h3>#If MQTT broker does not support password and ID settings, a 32 characters code will be added to the topic as the encryption code. e.g. TOPIC = ECODE+TOPIC</h3>\
-<h3>*Do not click this box if you are not using the Esp32 MQTT broker.</h3>\
-<h3>**Select one of the four as the subscription topic to receive Mqtt signals, other three are for transmission.</h3>\
-<h3>*** All PLC card mush use same ECODE.</h3>\
+<h3>*Select one of the four as the subscription topic to receive Mqtt signals, other three are for transmission.</h3>\
+<h3>** All PLC card mush use same ECODE.</h3>\
 <h3>Mqtt control is based on static control and the response time is about 1 second. For communication between PLC boards, refresh interval can adjust from 1 second to 10 second</h3>\
 <h3>For ESP32 broker encryted all PLC modules, include borker, must use same 'ECODE' code.</h3>\
 <h3 id='uph'>If any data is changed, the HARDWARE RESET key must be pressed to take effect.</h3>"
@@ -326,4 +329,4 @@ window.onload = async function(){
   Uploadsetup("MQSD");  
 }
 </script>
-)rawliteral";
+<!--)rawliteral";

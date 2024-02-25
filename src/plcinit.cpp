@@ -697,9 +697,13 @@ void HandleDevice(byte type,byte x,byte y,uint32_t realtimeloop)
       SetAnaValue(txtopic,dataz1[x][y],anastate[netnum[x][y]]);               
         targetpin=dataz1[x][y];  
         if(digstate[netnum[x][y]]==1)          
-          TxIOpinit[txtopic][targetpin-1]=1;                  
+          {TxIOpinit[txtopic][targetpin-1]=1;  
+          BoxState[x][y].DeviceState=ON;                  
+          }
         else         
-          TxIOpinit[txtopic][targetpin-1]=0;          
+          {TxIOpinit[txtopic][targetpin-1]=0;          
+          BoxState[x][y].DeviceState=OFF;  
+          }
       mqttuprdate=1;    
       clientTXStatus[txtopic]=1;            
       }

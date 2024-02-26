@@ -7,10 +7,10 @@ function addtext()
 var cellw=160; //block witdth
 var cellh=80;  //block height  
 Mqttsetup=JSON.parse(localStorage.getItem('systcell')); 
-if(tryonline!=1)
-  {if(Mqttsetup===null)
-    window.alert("Mqtt setup missing, please setup mqtt");
-  }  
+//if(tryonline!=1)
+//  {if(Mqttsetup===null)
+//    window.alert("Mqtt setup missing, please setup mqtt");
+//  }  
 svgtext=""; 
  //console.log('4=',serialcelldata);
   //serialcelldata[0]=47;     //add handle color//
@@ -45,11 +45,12 @@ svgtext="";
                   }
                 } 
               else
-                {if(type===45)
-                  {svgtext=svgtext+"<text x='"+(xa*cellw+xp2[type])+"' y='"+(yb*cellh+yp[2])+tcolor+Mqttsetup[0][1]+"</text>"  
-                  svgtext=svgtext+itext+(yb*cellh+yp[zc])+tcolor+lookup1table[y]+x+"</text>" 
-                  }
-                else if(type===50 || type===55)
+                {//if(type===45)
+                //  {svgtext=svgtext+"<text x='"+(xa*cellw+xp2[type])+"' y='"+(yb*cellh+yp[2])+tcolor+Mqttsetup[0][1]+"</text>"  
+                //  svgtext=svgtext+itext+(yb*cellh+yp[zc])+tcolor+lookup1table[y]+x+"</text>" 
+                //  }
+                //else ????
+                if(type===50 || type===55)
                   svgtext=svgtext+itext+(yb*cellh+yp[zc])+tcolor+phonecol[x]+"</text>"; 
                 else
                   svgtext=svgtext+itext+(yb*cellh+yp[zc])+tcolor+lookup1table[y]+x+"</text>"    
@@ -69,7 +70,8 @@ svgtext="";
                   //case 43:                                          
                     //svgtext=svgt+x+"</text>";   
                     //break;                         
-                  case 44:                              
+                  case 44:  
+                  case 45:                              
                     svgtext=svgt+Mqttsetup[0][x+1]+"</text>"; 
                     break;                    
                   case 46:
@@ -246,7 +248,7 @@ function clearfile()
     var id4num=iddlookup[serialcelldata[yy*48+xx*8+4]>>8]+type;//see iddlookup
     var id4type=outtype[serialcelldata[yy*48+xx*8+4]>>8]; 
     var id4MOD=MODtype[serialcelldata[yy*48+xx*8+4]>>8]; 
-    if(type===45 && id2num<256) id2num=256+type;
+    //if(type===45 && id2num<256) id2num=256+type; ????
     var id1numnotype=serialcelldata[yy*48+xx*8+1]>>8;
     var id2numnotype=serialcelldata[yy*48+xx*8+2]>>8;
     var id4numnotype=serialcelldata[yy*48+xx*8+4]>>8;
@@ -475,7 +477,7 @@ function clearfile()
     //if(type===43)   sdata=menuidst+OutputMode+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;                      //relay
     if(type===43)   sdata=menuidst+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;  
     if(type===44)   sdata=autoidstdigital+SelectTopic+"<h7>Topic should match RX Topic</h7><br>"+commnest+endst;                 //MQTT in
-    if(type===45)   sdata=autoidstdigital+"<h7>RX topic set in Mqtt setup</h7><br>"+commnest+"<br>"+endst;               //MQTT out    
+    if(type===45)   sdata=autoidstdigital+SelectTopic+"<h7>RX topic set in Mqtt setup</h7><br>"+commnest+"<br>"+endst;               //MQTT out    
     if(type===46)   sdata=autoidstdigital+UserDefineOut+SelMod4+commnest+endst;            //USER in
     if(type===47)   sdata=autoidstdigital+UserDefineIn+SelMod4+commnest+endst;                  //USER out
     if(type===48)   sdata=autoidstdigital+AMath+"<br>"+commnest+endst;                //math out
@@ -615,6 +617,7 @@ function closePopup(type,xx,yy) {
           val2 = document.getElementById('count').value;   
           break;   
     case  44:
+    case  45:
           val2 = document.getElementById('topicst').value;   
           break;             
     }

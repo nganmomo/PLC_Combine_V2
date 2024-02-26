@@ -155,8 +155,8 @@ var xhtp = new XMLHttpRequest();
     }   
   }  
   console.log("txdata=",txdata);  
-  //URL=window.location.host; 
-  URL="192.168.1.95:8088"
+  URL=window.location.host; 
+  //URL="192.168.1.95:8088"
   let t=0;
   let Txdata="";
   let L=txdata.length;
@@ -329,4 +329,4 @@ window.onload = async function(){
   Uploadsetup("MQSD");  
 }
 </script>
-<!--)rawliteral";
+)rawliteral";

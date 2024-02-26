@@ -128,7 +128,7 @@
 #define Aout4 12   
 
 #define setuppin    1         //SETUP BUTTON
-#define hwMCClock   2 
+#define pw_enable_sw   2 
 
 //#define mqttbrokenpin  37
 //#define mqttclientpin  38
@@ -205,7 +205,7 @@
 #define Ain4 0
 
 #define setuppin  4         //SETUP BUTTON
-#define hwMCClock  7 
+#define pw_enable_sw  7 
 //#define mqttbrokenpin  37
 //#define mqttclientpin  38
 #endif
@@ -243,7 +243,7 @@
 #define Ain4 0
 
 #define setuppin  13         //SETUP BUTTON
-#define hwMCClock 27 
+#define pw_enable_sw 27 
 //#define mqttclientpin  36
 #endif
 #ifdef  ver6    //KC868
@@ -282,7 +282,7 @@
 #define IRS   22  
 
 #define setuppin  19         //SETUP BUTTON
-#define hwMCClock 21 
+#define pw_enable_sw 21 
 #endif
 #define SETUPSTATE 0
 extern char mssid[20];
@@ -387,10 +387,10 @@ extern void clientTX(byte topic);
 extern byte clientTXStatus[4];
 extern void initmattdate();
 
-extern char RxAnaValue[9][4];   
-extern byte RxIOpinit[9]; 
-extern char TxAnaValue[4][8][4];   
-extern byte TxIOpinit[4][8];
+extern char RxAnaValue[4][9][4];   
+extern byte RxIOpinit[4][9]; 
+extern char TxAnaValue[8][4];   
+extern byte TxIOpinit[8];
 
 extern byte RelayOnOffstate[16];
 extern int  rxpin;

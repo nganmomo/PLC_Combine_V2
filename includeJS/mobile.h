@@ -47,8 +47,8 @@ for(var t=7;t<55;t++)
 let txdata1="*^^"+document.getElementById('mqtopic').value+'@';
 let txdata2="*$^"+mxsetdev+mysetdev+'@';    
 let txdata3="*^*"+document.getElementById('phpw').value+'@';  
-let txdata4="*$*"+document.getElementById('editpw').value+'@';  
-txdata=txdata+txdata1+txdata2+txdata3+txdata4;
+//let txdata4="*$*"+document.getElementById('editpw').value+'@';  
+txdata=txdata+txdata1+txdata2+txdata3;//+txdata4;
 length= txdata.length; 
 if(length<350)
   {xhtp.open("GET","http://"+URL+"/action?go=" + txdata, true);   
@@ -121,7 +121,7 @@ xhr.onreadystatechange = function() {
               if(this.responseText[j+t]==='@')
                 break;
               }
-          document.getElementById('editpw').value=phpval;                        
+          //document.getElementById('editpw').value=phpval;                        
           break;
           }                           
         }   
@@ -151,8 +151,8 @@ function makeid(length) {
 function GererateRC(type)
 {if(type===1)
 document.getElementById('phpw').value=makeid(8);
-if(type===2)
-document.getElementById('editpw').value=makeid(8);
+//if(type===2)
+//document.getElementById('editpw').value=makeid(8);
 if(type===3)
 document.getElementById('mqtopic').value=makeid(32);
 }
@@ -170,7 +170,7 @@ for(var t=1;t<=8;t++)
     }
   } 
 document.getElementById('phpw').value="1a2b3c4d"; 
-document.getElementById('editpw').value="a1b2c3d4"; 
+//document.getElementById('editpw').value="a1b2c3d4"; 
 document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";                       
 }
 
@@ -186,7 +186,7 @@ for(var t=1;t<=8;t++)
     }
   }  
 document.getElementById('phpw').value="30f5C7zR"; 
-document.getElementById('editpw').value="6FfeAq4a"; 
+//document.getElementById('editpw').value="6FfeAq4a"; 
 document.getElementById('mqtopic').value="nOFbQgD9gNQ5KkCbp8sewbZzVbuD8oWq";          
 }
 
@@ -306,32 +306,32 @@ var mobilekey=
 <button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
 <h3>Step 3: Assign the function of each key in the EDITPAGE</h3>\
 <h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"
-var mobilekey1=
-"<h3>Step 5:Input password for editpage online, get the code by scan the below QRCODE"   
+//var mobilekey1=
+//"<h3>Step 5:Input password for editpage online, get the code by scan the below QRCODE"   
 var mobilekey2=
-"<h3>Step 6:Input MQTT UNIQUE CODE, get the code by scan the follow QRCODE"     
+"<h3>Step 5:Input MQTT UNIQUE CODE, get the code by scan the follow QRCODE"     
 var mobilekey3=
-"<h3>Step 7:The link belew, if not open firewall in router, it just work on LOCAL AREA NETWORK</h3>"
+"<h3>Step 6:The link belew, if not open firewall in router, it just work on LOCAL AREA NETWORK</h3>"
 "<h3>The link work on http protocol, setup mqtt unique is not required</h3>"
 var mobilekey4=
 "<h4>When setup completed, return the setup switch to normal position. If firewall not open, you can ignore password</h4>"
 
 window.onload = async function(){       
   URL=window.location.host; 
-  //URL="192.168.1.84:8088";
+  //URL="192.168.1.95:8088";
   console.log('11ter',mcell);  
   document.getElementById('mobilekey').innerHTML=mobilekey;   
-  document.getElementById('mobilekey1').innerHTML=mobilekey1;   
+  //document.getElementById('mobilekey1').innerHTML=mobilekey1;   
   document.getElementById('mobilekey2').innerHTML=mobilekey2;
   document.getElementById('mobilekey3').innerHTML=mobilekey3;
   document.getElementById('mobilekey4').innerHTML=mobilekey4;
   loadkeytable(); 
 }
-
-var MQqrcode = new QRCode('qrcode4','https://ipcworld.w3spaces.com/index.html');
-document.getElementById('UTLI4').innerText='https://ipcworld.w3spaces.com/SVGPLC/pwaphwss.html';
-
-let valtp=localStorage.getItem('stmqtopic');  
+let valtp=localStorage.getItem('stmqtopic');    
+var MQqrcode = new QRCode('qrcode4','https://ipcworld.w3spaces.com/SVGPLC/PLC/pwaphwss.html/'+valtp);
+//document.getElementById('UTLI4').innerText='https://ipcworld.w3spaces.com/SVGPLC/PLC/pwaphwss.html/';
+document.getElementById('UTLI4').innerText='192.168.1.68:3300/pwaphwss/'+valtp;
+//let valtp=localStorage.getItem('stmqtopic');  
 var qrcode = new QRCode('qrcode1',valtp);
 document.getElementById('UTLI1').innerText=valtp; 
 
@@ -339,8 +339,8 @@ let valpw=localStorage.getItem('stmpwapw');
 var qrcode = new QRCode('qrcode2',valpw);
 document.getElementById('UTLI2').innerText=valpw; 
 
-var qrcode = new QRCode('qrcode3',window.location.host);
-document.getElementById('UTLI3').innerText=window.location.host; 
+//var qrcode = new QRCode('qrcode3',window.location.host);
+//document.getElementById('UTLI3').innerText=window.location.host; 
 
 </script>
 <style>

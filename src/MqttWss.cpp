@@ -82,39 +82,37 @@ PubSubClient client_s(espClient_s);
 TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer; 
 
-void clientsetup(byte mqtt) {
-  if(mqtt)
-  {eerbyte(MQtopic,phonetopic,32);    
-    getdata(0,0,MQTT_BROKER);  
-    getdata(1,0,mqtt_port_char);
-    getdata(2,0,MUSERID);
-    getdata(3,0,MPASSWORD);
-    
-    getdata(2,1,EnECODE);  
-    getdata(1,1,ECODE); //1,1  
-    
-    getdata(0,6,EWSS); 
-    getdata(1,6,EPLCMQTT);
-    getdata(2,6,EPHMQTT);       
-    Serial.print("MQTT_BROKER :"); 
-    Serial.println(MQTT_BROKER);   
-    Serial.print("mqtt_port_char :"); 
-    Serial.println(mqtt_port_char); 
-    Serial.print("ECODE :");  
-    Serial.println(ECODE);  
-    Serial.print("EnECODE :");  
-    Serial.println(EnECODE[0]);   
-    Serial.print("USERID :");  
-    Serial.println(MUSERID);   
-    Serial.print("MPASSWORD :");
-    Serial.println(MPASSWORD);
-    Serial.print("EWSS=");  
-    Serial.println(EWSS[0]);  
-    Serial.print("EPLCMQTT=");  
-    Serial.println(EPLCMQTT);     
-    Serial.print("EPHMQATT=");  
-    Serial.println(EPHMQTT);     
-if(EWSS[0]=='1')
+void clientsetup(byte mqtt) {  
+  eerbyte(MQtopic,phonetopic,32);    
+  getdata(0,0,MQTT_BROKER);  
+  getdata(1,0,mqtt_port_char);
+  getdata(2,0,MUSERID);
+  getdata(3,0,MPASSWORD);        
+  getdata(2,1,EnECODE);  
+  getdata(1,1,ECODE); //1,1      
+  getdata(0,6,EWSS); 
+  getdata(1,6,EPLCMQTT);
+  getdata(2,6,EPHMQTT);       
+  Serial.print("MQTT_BROKER :"); 
+  Serial.println(MQTT_BROKER);   
+  Serial.print("mqtt_port_char :"); 
+  Serial.println(mqtt_port_char); 
+  Serial.print("ECODE :");  
+  Serial.println(ECODE);  
+  Serial.print("EnECODE :");  
+  Serial.println(EnECODE[0]);   
+  Serial.print("MQTT USER ID :");  
+  Serial.println(MUSERID);   
+  Serial.print("MQTT PASSWORD :");
+  Serial.println(MPASSWORD);
+  Serial.print("MQTT USE WSS=");  
+  Serial.println(EWSS[0]);  
+  Serial.print("PLC MQTT ENABLE=");  
+  Serial.println(EPLCMQTT);     
+  Serial.print("PHONE MQTT ENABLE=");  
+  Serial.println(EPHMQTT);     
+if(mqtt)
+{if(EWSS[0]=='1')
   wssenable=1;
 else
   wssenable=0;  
@@ -135,7 +133,7 @@ if(ISMASTER[1]=='3')
   Serial.println("SLAVE C");      
   for(int t=1;t<6;t++)       
     {if(t==5) 
-      {Serial.print("This Phone assigned=");  
+      {Serial.print("This Phone assigned=");  //no topic for phone
       Serial.println(phonetopic);  
       }
     else
@@ -157,6 +155,10 @@ if(ISMASTER[1]=='3')
     client.setCallback(callback);
     }
   }
+else
+  {
+  Serial.println("Mqtt setup require, Please click [Enable PLC Mqtt]");   
+  }  
 //mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));  
 wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
 WiFi.onEvent(WiFiEvent);
@@ -257,20 +259,24 @@ else
 //(3) the buttonmod and buttonnum detect runplc loop, when data ready,Mqtt get it by request display. 
 void callback(char* topic, byte* payload, unsigned int len) {
 char chars[200];
+byte rxtopic;
 for(unsigned int i = 0; i < len; i++)
   chars[i] = (char)payload[i];
 Serial.print("callback=");
-Serial.println(chars);     
-if(topic[0]=='P')   //PLC
-  {byte t,j;
+Serial.println(chars);   
+Serial.print("topic=");
+Serial.println(topic);     
+if(topic[0]=='M'|| topic[0]=='A'|| topic[0]=='B'|| topic[0]=='C')   //PLC
+  {if(topic[0]=='M') rxtopic=0;if(topic[0]=='A') rxtopic=1;if(topic[0]=='B') rxtopic=2;if(topic[0]=='C') rxtopic=3;  
+  byte t,j;
   byte y=0;  
   //pass mqtt status to plcinit.cpp case 45//  
   for(t=1;t<=8;t++)    //2D array to 1D array
     {for(j=0;j<4;j++)
-      RxAnaValue[t][j]=payload[y++]-0x30;                               
+      RxAnaValue[rxtopic][t][j]=payload[y++]-0x30;                               
     }    
   for(t=1;t<=8;t++)    
-    RxIOpinit[t]=payload[y++]-0x30; //and change to ascii  
+    RxIOpinit[rxtopic][t]=payload[y++]-0x30; //and change to ascii  
   }
   //pass mqtt status to plcinit.cpp case 45//
 if(topic[0]=='T')   //for Mqtt phone
@@ -307,38 +313,60 @@ if(topic[0]=='T')   //for Mqtt phone
 void onMqttConnect() { 
   mqttconnected=1;
   Serial.println("Connected to MQTT.");
+  char lookup[5]={'T','M','A','B','C'};
   char str[100];
   char pstr[100];
-  char tstr[100];  
-  str[0]='P';//PLC
-  str[1]='\0';
-  tstr[0]='T';//telephone
-  tstr[1]='\0';    
-  //if(EPLCMQTT[0]=='1')
-    strcat(str, ECODE);
-  strcat(str, &MYTOPIC[0][0]); //add broker
-  Serial.print("PLC subscribe:");
-  Serial.println(str);
-  if(wssenable)
-    client_s.subscribe(str); 
-  else  
-      {strcat(str, &MYTOPIC[0][0]); //add broker                      
+  char tstr[100];    
+  strcat(str, ECODE);
+  //strcat(str, &MYTOPIC[0][0]); //add broker                      
+  if(ISMASTER[1]=='0')
+    {Serial.println("PLC Master subscribe list:");
       for(int t=1;t<=4;t++)
-        {strcpy(pstr,"");
-        strcat(pstr,str);
-        strcat(pstr,&MYTOPIC[t][0]);                       
-        client.subscribe(pstr);
-        Serial.println(pstr); 
-        strcpy(pstr,"");    
-        }
+      {strcpy(pstr,"");      
+      pstr[0]=lookup[t];
+      pstr[1]='\0';      
+      strcat(pstr,ECODE);    
+      strcat(pstr,&MYTOPIC[t][0]);                       
+      if(wssenable)
+        client_s.subscribe(pstr);
+      else
+        client.subscribe(pstr);    
+      Serial.println(pstr);
+      strcpy(pstr,"");    
       }
-  strcat(tstr,phonetopic);
-  Serial.print("Phone subscribe Topic:");
-  Serial.println(tstr);
-  if(wssenable)
-    client_s.subscribe(tstr);   
+    }
   else
-    client.subscribe(tstr); 
+    {Serial.println("PLC Slave subscribe:");
+      strcpy(pstr,"");
+    strcat(pstr,str);
+    pstr[0]=lookup[ISMASTER[1]-0x30+1];
+    pstr[1]='\0';
+    strcat(pstr,ECODE);    
+    strcat(pstr,&MYTOPIC[ISMASTER[1]-0x30+1][0]);
+    client.subscribe(pstr);   
+    Serial.println(pstr);
+    Serial.println(pstr);
+    }  
+  if(EPHMQTT[0]=='1')
+  {int ttc;  
+  for(ttc=0;ttc<32;ttc++)  
+    {if(phonetopic[ttc]>'z')
+        break;                   
+    }
+  if(ttc>30)  
+    {tstr[0]=lookup[0];//telephone
+    tstr[1]='\0';    
+    strcat(tstr,phonetopic);
+    Serial.println("Phone subscribe:");
+    Serial.println(tstr); 
+    if(wssenable)
+      client_s.subscribe(tstr);   
+    else
+      client.subscribe(tstr); 
+    }
+  else
+    Serial.println("Phone setup require");   
+  }
 } 
 
 //For telephone
@@ -382,7 +410,7 @@ byte txrequired=0;  //if no change bypass tx;
 char pay_load[41];
 if(EPLCMQTT[0]=='1')
   {for(t=0;t<8;t++)    //2D array to 1D array
-    {for(j=0;j<4;j++)       //prepare analog
+    {for(j=0;j<4;j++)
       {pay_load[y++]=TxAnaValue[topic][t][j];         
       if(TxAnaValue[topic][t][j]!=lastTxAnaValue[topic][t][j])
         {txrequired=1;
@@ -390,7 +418,7 @@ if(EPLCMQTT[0]=='1')
         }
       }
     }  
-    for(t=0;t<8;t++)        //prepare digital
+    for(t=0;t<8;t++)    
     {pay_load[y++]=TxIOpinit[topic][t]; //and cnange to ascii
     if(TxIOpinit[topic][t]!=lastTxIOpinit[topic][t])
       {txrequired=1;
@@ -399,16 +427,17 @@ if(EPLCMQTT[0]=='1')
     }
     if(txrequired==1)      
     { char str[100];
-      str[0]='P';
+      char lookup[5]={'T','M','A','B','C'};
+      str[0]=lookup[topic+1];
       str[1]='\0';
       for(t=0;t<40;t++)    
       pay_load[t]=pay_load[t]+0x30;
       pay_load[40]='\0';      
-      if(EnECODE[0]=='1')
-        strcat(str, ECODE);               
+      //if(EnECODE[0]=='1')
+      strcat(str, ECODE);               
       strcat(str, &MYTOPIC[topic+1][0]);
-      Serial.print("pay_load=");
-      Serial.println(pay_load);   
+      Serial.print("str=");
+      Serial.println(str);   
       if(wssenable)    
         client_s.publish(str,pay_load,true);                            
       else

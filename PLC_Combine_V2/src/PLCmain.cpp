@@ -300,7 +300,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     }    
   if(variable[0]=='M' && variable[1]=='C' && variable[2]=='C') //Check password
     {//systemsetup();         //http://192.186.1.84:8088/MQST       
-    if(digitalRead(hwMCClock)==1)
+    if(digitalRead(pw_enable_sw)==1)
       {variable[4]='Y';adminpermit=0;}
     else
       {byte t;      
@@ -504,9 +504,9 @@ void setup(){
   #ifdef  uart1
   Serial1.begin(115200, SERIAL_8N1, SERIAL1_TX_PIN, SERIAL1_RX_PIN);     
   #endif
-  if(hwMCClock!=0)  //On or OFf passward check//
-    {pinMode(hwMCClock,INPUT_PULLUP);
-    if(digitalRead(hwMCClock)==1)  
+  if(pw_enable_sw!=0)  //On or OFf passward check//
+    {pinMode(pw_enable_sw,INPUT_PULLUP);
+    if(digitalRead(pw_enable_sw)==1)  
       Serial.println("PW Setup switch is in UNLOCK position");  
     else
       Serial.println("PW Setup switch is in LOCK position");    
@@ -624,7 +624,7 @@ void setup(){
   Serial.print("phonepw = ");
   Serial.println(Storephonepw);
   eerbyte(editpw,Storeeditpw,8); 
-  Serial.print("PLC PW  = ");
+  Serial.print("PLC_PW  = ");
   Serial.println(Storeeditpw);
   /*
   {byte x,y;

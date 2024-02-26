@@ -437,7 +437,7 @@ function CheckHWStatus(x) {
       else
         {document.getElementById("botstatus").innerText ="NORMAL";                        
         //document.getElementById("botstatus").style.color ="yellow";      
-        window.alert("Check mqtt switch and wifi");
+        window.alert("Check mqtt switch and wifi\n Mqtt Set require");
         }
       }        
     } 

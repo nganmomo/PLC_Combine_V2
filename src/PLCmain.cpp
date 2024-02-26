@@ -284,13 +284,13 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     ReturnSign='U';   
     }
   if(variable[0]=='M' && variable[1]=='Q' && variable[2]=='S') //MQTT Uploadsetup MQST Tested
-    {systemsetup();         //http://192.186.1.84:8088/MQST        
+    {systemsetup();               
     //Serial.print("variable=");
     //Serial.println(variable);
     Runmode=1;    //RUN PLC    
     }  
   if(variable[0]=='M' && variable[1]=='C' && variable[2]=='K') //MQTT Uploadsetup MQST Tested
-    {//systemsetup();         //http://192.186.1.84:8088/MQST       
+    {  
     if(mqttconnected==1) variable[3]='Q';
     else  variable[3]='N';
      if(Runmode) variable[4]='S';
@@ -299,9 +299,8 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     Runmode=1;    //RUN PLC    
     }    
   if(variable[0]=='M' && variable[1]=='C' && variable[2]=='C') //Check password
-    {//systemsetup();         //http://192.186.1.84:8088/MQST       
-    if(digitalRead(hwMCClock)==1)
-      {variable[4]='Y';adminpermit=0;}
+    {if(digitalRead(pw_enable_sw)==1)      //if pw_enable_sw==1 bypass check password
+      {variable[4]='Y';adminpermit=0;}  //admin condition
     else
       {byte t;      
       eerbyte(editpw,Storeeditpw,9);
@@ -504,15 +503,16 @@ void setup(){
   #ifdef  uart1
   Serial1.begin(115200, SERIAL_8N1, SERIAL1_TX_PIN, SERIAL1_RX_PIN);     
   #endif
-  if(hwMCClock!=0)  //On or OFf passward check//
-    {pinMode(hwMCClock,INPUT_PULLUP);
-    if(digitalRead(hwMCClock)==1)  
-      Serial.println("PW Setup switch is in UNLOCK position");  
+  Serial.println("///////////////Donkey PLC setup information///////////////");  
+  if(pw_enable_sw!=0)  //On or OFf passward check//
+    {pinMode(pw_enable_sw,INPUT_PULLUP);
+    if(digitalRead(pw_enable_sw)==1)  
+      Serial.println("Password Setup switch is in UNLOCK position");  
     else
-      Serial.println("PW Setup switch is in LOCK position");    
+      Serial.println("Password Setup switch is in LOCK position");    
     }  
   ///////////////////////////////  
-  Serial.println("PLC Maxtron");  
+  Serial.println("Designed by Maxtron Lab.");  
   eerpassid(eessid,mssid,mpass);
   Serial.println(mssid);
   Serial.println(mpass);    
@@ -591,9 +591,9 @@ void setup(){
         break;
       }    
     if(tc<12)
-       Serial.println("Unicode not match");
+       Serial.println("MCU Unicode not match");
     else
-       Serial.println("Unicode match");    
+       Serial.println("MCU Unicode match");    
     #endif
   timeClient.begin(); 
   Serial.println("WiFi connected");

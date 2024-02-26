@@ -55,15 +55,15 @@ unsigned long Rtimeset[9];
 byte Rtimersetflag[9]; //timer set flag
 //byte RTimerRetOnce[9];
 
-char RxAnaValue[9][4];   
-byte RxIOpinit[9]; 
+char RxAnaValue[4][9][4];   
+byte RxIOpinit[4][9]; 
 //Receive analog value and put to analog net
-int GetAnaValue(byte port)
+int GetAnaValue(byte port,byte intopic)
 {int value;
-value=RxAnaValue[port][1]*100+RxAnaValue[port][2]*10+RxAnaValue[port][3]; 
+value=RxAnaValue[intopic][port][1]*100+RxAnaValue[intopic][port][2]*10+RxAnaValue[intopic][port][3]; 
 //Serial.print("value=");
 //Serial.println(value);
-if(port!=RxAnaValue[port][0]+1) //port match
+if(port!=RxAnaValue[intopic][port][0]+1) //port match
   value=999;
 //Serial.print("Port=");
 //Serial.println(port);
@@ -320,18 +320,20 @@ for(x=0;x<xcount;x++)
             break;                   
           case  45:           //MQTT from user for API phone also,                 
             if((realtimeloop&0xfff)==0xfff)                  
-            {byte targetpin=dataz1[x][y];               
-            int avalue=GetAnaValue(targetpin);                      
-            //Serial.print("targetpin="); 
-            //Serial.println(targetpin); 
+            {byte targetpin=dataz1[x][y];  
+            byte intopic=dataz2[x][y]-1;               
+            int avalue=GetAnaValue(targetpin,intopic);                      
+            //Serial.print("intopic="); 
+            //Serial.println(intopic); 
             //Serial.print("avalue="); 
             //Serial.println(avalue); 
+            //int avalue=999;
             if(avalue<256)
-              {anastate[netnum[x+1][y]]=GetAnaValue(targetpin);  //analog
+              {anastate[netnum[x+1][y]]=GetAnaValue(targetpin,intopic);  //analog
               }
-            if(RxIOpinit[targetpin]<=1)
-              {digstate[netnum[x+1][y]]=RxIOpinit[targetpin];    //IO               
-              BoxState[x][y].DeviceState=RxIOpinit[targetpin];           
+            if(RxIOpinit[intopic][targetpin]<=1)
+              {digstate[netnum[x+1][y]]=RxIOpinit[intopic][targetpin];    //IO               
+              BoxState[x][y].DeviceState=RxIOpinit[intopic][targetpin];           
               }                        
             }             
             break;                  

@@ -2,12 +2,11 @@
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #ifdef wssencode
-char phonetopic[60];
 char mqtt_port_char[6];
 char ISMASTER[5]; 
 char MYTOPIC[5][64];  // = "mytopic2";
 char ECODE[40];  
-char EnECODE[2]; 
+char PCODE[40];  
 char EWSS[2];   
 char MQTT_BROKER[64];  
 char MPASSWORD[32];  
@@ -83,13 +82,13 @@ TimerHandle_t mqttReconnectTimer;
 TimerHandle_t wifiReconnectTimer; 
 
 void clientsetup(byte mqtt) {  
-  eerbyte(MQtopic,phonetopic,32);    
+  //eerbyte(MQtopic,PCODE,32);        
   getdata(0,0,MQTT_BROKER);  
   getdata(1,0,mqtt_port_char);
   getdata(2,0,MUSERID);
   getdata(3,0,MPASSWORD);        
-  getdata(2,1,EnECODE);  
   getdata(1,1,ECODE); //1,1      
+  getdata(2,1,PCODE);
   getdata(0,6,EWSS); 
   getdata(1,6,EPLCMQTT);
   getdata(2,6,EPHMQTT);       
@@ -98,9 +97,9 @@ void clientsetup(byte mqtt) {
   Serial.print("mqtt_port_char :"); 
   Serial.println(mqtt_port_char); 
   Serial.print("ECODE :");  
-  Serial.println(ECODE);  
-  Serial.print("EnECODE :");  
-  Serial.println(EnECODE[0]);   
+  Serial.println(ECODE);    
+  Serial.print("PCODE :");  
+  Serial.println(PCODE);    
   Serial.print("MQTT USER ID :");  
   Serial.println(MUSERID);   
   Serial.print("MQTT PASSWORD :");
@@ -134,7 +133,7 @@ if(ISMASTER[1]=='3')
   for(int t=1;t<6;t++)       
     {if(t==5) 
       {Serial.print("This Phone assigned=");  //no topic for phone
-      Serial.println(phonetopic);  
+      Serial.println(PCODE);  
       }
     else
       {getdata(0,t+1,&MYTOPIC[t][0]);    
@@ -262,10 +261,10 @@ char chars[200];
 byte rxtopic;
 for(unsigned int i = 0; i < len; i++)
   chars[i] = (char)payload[i];
-Serial.print("callback=");
-Serial.println(chars);   
-Serial.print("topic=");
-Serial.println(topic);     
+//Serial.print("callback=");
+//Serial.println(chars);   
+//Serial.print("topic=");
+//Serial.println(topic);     
 if(topic[0]=='M'|| topic[0]=='A'|| topic[0]=='B'|| topic[0]=='C')   //PLC
   {if(topic[0]=='M') rxtopic=0;if(topic[0]=='A') rxtopic=1;if(topic[0]=='B') rxtopic=2;if(topic[0]=='C') rxtopic=3;  
   byte t,j;
@@ -343,26 +342,26 @@ void onMqttConnect() {
     pstr[1]='\0';
     strcat(pstr,ECODE);    
     strcat(pstr,&MYTOPIC[ISMASTER[1]-0x30+1][0]);
-    client.subscribe(pstr);   
-    Serial.println(pstr);
+    client.subscribe(pstr);     
     Serial.println(pstr);
     }  
   if(EPHMQTT[0]=='1')
   {int ttc;  
   for(ttc=0;ttc<32;ttc++)  
-    {if(phonetopic[ttc]>'z')
+    {if(PCODE[ttc]>'z')
         break;                   
     }
   if(ttc>30)  
     {tstr[0]=lookup[0];//telephone
     tstr[1]='\0';    
-    strcat(tstr,phonetopic);
+    strcat(tstr,PCODE);
     Serial.println("Phone subscribe:");
     Serial.println(tstr); 
     if(wssenable)
       client_s.subscribe(tstr);   
     else
       client.subscribe(tstr); 
+    Serial.println(pstr);      
     }
   else
     Serial.println("Phone setup require");   
@@ -374,7 +373,7 @@ void TxToPhone(byte isinit,int length) {
 char str[100];
 str[0]='R'; //response sign
 str[1]='\0';
-strcat(str,phonetopic);
+strcat(str,PCODE);
 //Serial.print("str1=");
 //Serial.println(str);
 if(isinit==DPLAY)   //Display
@@ -432,8 +431,7 @@ if(EPLCMQTT[0]=='1')
       str[1]='\0';
       for(t=0;t<40;t++)    
       pay_load[t]=pay_load[t]+0x30;
-      pay_load[40]='\0';      
-      //if(EnECODE[0]=='1')
+      pay_load[40]='\0';          
       strcat(str, ECODE);               
       strcat(str, &MYTOPIC[topic+1][0]);
       Serial.print("str=");

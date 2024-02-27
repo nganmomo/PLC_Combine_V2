@@ -257,9 +257,12 @@ void systemsetup()
     eerbyte(timeclock,variable,500);
     variable[3]='D';
     }           
-variable[0]='m';   
+variable[0]='m'; 
+variable[1]='Q'; 
+variable[2]='s'; 
 mqttrun=1;      
 }    
+
 byte clkid[17];
 int32_t setbt[17];
 int32_t setet[17];

@@ -1,31 +1,12 @@
-static const char PROGMEM INDEX_HTML_mobile[] = R"rawliteral(
+static const char PROGMEM INDEX_HTML_mobile[] = R"rawliteral(  
 <!DOCTYPE html>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'></script>
-<body><div id=mobilekey></div>
-
-  <h2 id='UTLI4'></h2>
-  <div class="qr" id='qrcode4'></div><br><br>
-    
-  <div id=mobilekey1></div>  
-
-  <h2 id='UTLI2'></h2>
-  <div class="qr" id='qrcode2'></div><br><br>
-  
-  <div id=mobilekey2></div> 
-  
-  <h2 id='UTLI1'></h2>
-  <div class="qr" id='qrcode1'></div><br><br>
-
-  <div id=mobilekey3></div> 
-  <h2 id='UTLI3'></h2>
-  <div class="qr" id='qrcode3'></div><br><br>
-  
-  <div id=mobilekey4></div> 
+<body>
+<div id=mobilekey></div>
 </body>
 <script>
 let mxsetdev=6;
 let mysetdev=8;
-var URL="";
+
 //var rowtext = Array.from(Array(mxsetdev), () => new Array(mysetdev)); 
 var rowtext = Array.from(Array(6), () => new Array(8)); 
 var mcell = new Array(48);
@@ -267,8 +248,8 @@ function loadkeytable2(){
 
 
 var mobilekey=
-"<h3>Step 1:To unlack this setup, in PLC, set the PARAMETER setup switch to ON postion and press reset</h3>\
-<h3>Step 2 : Input keypad character, row and column number, please defaultA or defualtB</h3>\
+"<h3>Step 1:Set lock switch in unlock position</h3>\
+<h3>Step 2 : Input keypad character, row and column number</h3>\
 <h3>and than edit the necessory value, press upload when done</h3>\
 <table class='devtable'><tbody>\
 <tr id='myDRow0'></tr><tr id='myDRow1'></tr><tr id='myDRow2'></tr><tr id='myDRow3'>\
@@ -306,42 +287,15 @@ var mobilekey=
 <button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
 <h3>Step 3: Assign the function of each key in the EDITPAGE</h3>\
 <h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"
-//var mobilekey1=
-//"<h3>Step 5:Input password for editpage online, get the code by scan the below QRCODE"   
-var mobilekey2=
-"<h3>Step 5:Input MQTT UNIQUE CODE, get the code by scan the follow QRCODE"     
-var mobilekey3=
-"<h3>Step 6:The link belew, if not open firewall in router, it just work on LOCAL AREA NETWORK</h3>"
-"<h3>The link work on http protocol, setup mqtt unique is not required</h3>"
-var mobilekey4=
-"<h4>When setup completed, return the setup switch to normal position. If firewall not open, you can ignore password</h4>"
 
-window.onload = async function(){       
-  URL=window.location.host; 
+window.onload = async function(){         
   //URL="192.168.1.95:8088";
+  URL=window.location.host;  
+  console.log(URL);
   console.log('11ter',mcell);  
-  document.getElementById('mobilekey').innerHTML=mobilekey;   
-  //document.getElementById('mobilekey1').innerHTML=mobilekey1;   
-  document.getElementById('mobilekey2').innerHTML=mobilekey2;
-  document.getElementById('mobilekey3').innerHTML=mobilekey3;
-  document.getElementById('mobilekey4').innerHTML=mobilekey4;
+  document.getElementById('mobilekey').innerHTML=mobilekey;     
   loadkeytable(); 
 }
-let valtp=localStorage.getItem('stmqtopic');    
-var MQqrcode = new QRCode('qrcode4','https://ipcworld.w3spaces.com/SVGPLC/PLC/pwaphwss.html/'+valtp);
-//document.getElementById('UTLI4').innerText='https://ipcworld.w3spaces.com/SVGPLC/PLC/pwaphwss.html/';
-document.getElementById('UTLI4').innerText='192.168.1.68:3300/pwaphwss/'+valtp;
-//let valtp=localStorage.getItem('stmqtopic');  
-var qrcode = new QRCode('qrcode1',valtp);
-document.getElementById('UTLI1').innerText=valtp; 
-
-let valpw=localStorage.getItem('stmpwapw');  
-var qrcode = new QRCode('qrcode2',valpw);
-document.getElementById('UTLI2').innerText=valpw; 
-
-//var qrcode = new QRCode('qrcode3',window.location.host);
-//document.getElementById('UTLI3').innerText=window.location.host; 
-
 </script>
 <style>
 body

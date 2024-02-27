@@ -6,11 +6,11 @@ function addtext()
 {gettimeclock();
 var cellw=160; //block witdth
 var cellh=80;  //block height  
-Mqttsetup=JSON.parse(localStorage.getItem('systcell')); 
-//if(tryonline!=1)
-//  {if(Mqttsetup===null)
-//    window.alert("Mqtt setup missing, please setup mqtt");
-//  }  
+//Mqttsetup=JSON.parse(localStorage.getItem('systcell')); 
+if(mqupdate===1)
+  {mqupdate=0;
+  downloadsetup('MQSD',Mqttsetup);
+  }
 svgtext=""; 
  //console.log('4=',serialcelldata);
   //serialcelldata[0]=47;     //add handle color//

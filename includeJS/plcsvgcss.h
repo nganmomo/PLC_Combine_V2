@@ -108,7 +108,9 @@ body {
     height: 400px;   
     margin-left: 5px;   
     overflow-y: auto;
-    overflow-x: hidden;               
+    overflow-x: hidden;
+    scrollbar-color: rgb(59, 58, 58) rgb(26, 26, 25);               
+    scrollbar-width: 5px; 
     margin-top: -2px;  
     border-radius: 3px;
     color:azure;
@@ -185,7 +187,8 @@ button{
   margin-right:0px;
   transform: scale(1); 
   overflow-y: auto;
-  overflow-x: hidden;  
+  overflow-x: hidden; 
+  scrollbar-color: rgb(59, 58, 58) rgb(26, 26, 25);   
   background-color:rgb(128, 134, 128);
   }
 

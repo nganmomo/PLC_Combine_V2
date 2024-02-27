@@ -492,7 +492,7 @@ void coolboot()
 digitalWrite(COOLBOOT,LOW);
 }
 #endif
-void setup(){      
+void setup(){   
   // Initialize the watchdog timer with a timeout of 10 seconds  
   esp_task_wdt_init(20, false);   //false to stop watch dog timer -> turn on is true
   esp_task_wdt_add(NULL); 

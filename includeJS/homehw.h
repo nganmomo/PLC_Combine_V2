@@ -36,6 +36,7 @@ static const char PROGMEM INDEX_HTML_homehw[] = R"rawliteral(
 <script>
 //var tryonline=1;      //Require hardware
 var tryonline=0;    //Not require hardware
+var mqupdate=0;
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -139,7 +140,8 @@ function closeModal() {
 }    
 
 function showedit(x)
-{if(x===1 || x===2)
+{mqupdate=1;
+if(x===1 || x===2)
   {if(x===2)
     document.getElementById('closeul').style.visibility='hidden'
     //updatacell();  

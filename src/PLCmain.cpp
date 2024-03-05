@@ -514,8 +514,10 @@ void setup(){
   ///////////////////////////////  
   Serial.println("Designed by Maxtron Lab.");  
   eerpassid(eessid,mssid,mpass);
-  Serial.println(mssid);
-  Serial.println(mpass);    
+  if(mssid[0]>=0x30 && mssid[0]<0x7e)
+  {Serial.println(mssid);
+  Serial.println(mpass); 
+  }   
   if(digitalRead(setuppin)==SETUPSTATE)  //setup mode
     {byte key; 
     setupmode=1;   

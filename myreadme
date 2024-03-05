@@ -94,6 +94,6 @@ Http in PLC
 PLChtml_V2
 //
 PCB_ESP32samllPLCv-5A = bottom 
-ESP32samllPLCv-5B = TOP 
-PCB_ESP32samllPLCv-5 = bottom 6 relay 
+ESP32samllPLCv-5B_2 = TOP 
+PCB_ESP32samllPLCv-5_4 = bottom 6 relay 
 

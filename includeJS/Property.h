@@ -25,10 +25,10 @@ svgtext="";
         let y=serialcelldata[zc+xa*8+yb*48]&255; //lower 8 bit       //1  
         if(serialcelldata[zc+xa*8+yb*48]!="")
           {let yp=[0,12,30,40,48,75,60,48];
-          let xp1=[0,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,20,18,18,18,18,35,18,18,18,18,35,35,18,18,18,18, 0,38,30,18,18,18,18,18,18,18,18];   
-          let xp2=[0,20,20,20,20,20,20,20,20,20,10,20,20,20,20,20,20,20,20,19,20,20,20,35,30,30,35,30,30,20,30,20,20,20,20,20,30,35,35,35,43,33,33,45,20,35,35,35,33,20,35,20,20,20,20,35,35,20,20,20,35,61,20,20,20,20,20,20,20,20,20,10];  
+          let xp1=[0,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,20,18,18,18,18,35,18,18,18,18,35,35,18,18,18,18,20,38,30,18,18,18,18,18,18,18,18];   
+          let xp2=[0,20,20,20,20,20,20,20,20,20,10,20,20,20,20,20,20,20,20,19,20,20,20,35,40,40,35,40,40,40,40,20,20,40,40,40,40,35,35,35,43,33,33,40,20,35,35,35,33,20,35,20,20,20,20,35,35,20,20,20,35,40,20,20,20,20,20,20,20,20,20,10];  
           //t xp2=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10, 1, 2, 3, 4, 5, 6, 7, 8, 9,20, 1, 2, 3, 4, 5, 6, 7, 8, 9,30, 1, 2, 3, 4, 5, 6, 7, 8, 9,40, 1, 2, 3, 4, 5, 6, 7, 8, 9,50, 1, 2, 3, 4, 5, 6, 7, 8, 9,60, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-          let xp4=[0,20,20,20,20,20,20,20,20,20,10,20,20,20,20,20,20,20,20,19,20,20,20, 5,20,20,20,20,20,20,30,30,30,30,30,20,35,35,35,25,20,33,33,20,38,20,20,20,20,20,40,50,20,20,20,20,20,20,20,20, 5, 0,20,20,20,20,20,20,20,20,30,10];  
+          let xp4=[0,20,20,20,20,20,20,20,20,20,10,20,20,20,20,20,20,20,20,19,20,20,20, 5,20,20,20,20,20,20,30,30,30,30,30,20,35,35,35,25,20,33,33,20,38,20,35,35,20,20,40,50,20,20,20,20,20,20,20,20, 5,40,20,20,20,20,20,20,20,20,30,10];  
           let xp5=[0,20,20,20,20,20,20,20,20,20,10,20,20,20,20,20,20,20,20,19,20,20,20,35,20,20,20,20,20,20,30,20,20,20,20,20,20,20,20,20,40,20,20,20,20,20,20,20,20,20,50,20,20,20,20,20,20,20,20,20, 5,61,20,20,20,20,20,20,20,20,20,10];       
           if(zc===1 || zc===2)  //text 1 2 required code convert ???
             {if(zc==1)
@@ -119,8 +119,8 @@ svgtext="";
             else
               {if(type===23) 
                 svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+outtype[x]+"</text>"; 
-              else if(type===46 || type===47)
-                svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+MODtype[x]+"</text>";      
+              else if(type===46 || type===47 || type===61)
+                svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[4])+tcolor+y16+"</text>";    //MODtype[x]+"</text>";      
               else if(type===60)
                 svgtext=svgtext+"<text x='"+(xa*cellw+xp4[type])+"' y='"+(yb*cellh+yp[6])+tcolor+y16+"</text>";            
               else if(type===38 || type===41 || type===42)
@@ -219,13 +219,13 @@ function clearfile()
   var phoneworkmode=['ON/OFF','ON/OFF','PULSE','VALUE'];
   var lookup1table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2',"Link ","Aout","Ain","CON","Din","Din","Din","Din","Din","Din","Din","Din","Din","Din","Timer",
-    "Counter","RSFF ","DAC","ADC","CMP","Pin","MqttTx","MqttRx","UserTx","UserRx","Math","Group","COL","51","52","53","54","COL","","57","58","59","RTimer ","","Clock "];
+    "Counter","RSFF ","DAC","ADC","CMP","Pin","MqttTx","MqttRx","UserTx","UserRx","Math","","COL","51","52","53","54","COL","","57","58","59","RTimer ","","Clock "];
   var lookup2table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
-    '1','2','RLY','4','AIN','val','Return','8','9','Din','1','2','3','4','5','16','Mode/Unit','Mode','0=Forever(sec)',
-    'Step','Ref','L-H:','Pin use','To-Topic','RxTopic','TYPE','TYPE','Mode','Mode','ROW','Row','52','53','54','ROW','Mode','57','58','59','Mode','','activated'];
+    '1','','RLY','','','val','Return','','','','','','','','','','Mode/Unit','Mode','0=Forever(sec)',
+    'Step','Ref','L-H:','','To-Topic','RxTopic','TYPE','TYPE','Mode','Mode','ROW','Row','52','53','54','ROW','Mode','57','58','59','Unit','','activated'];
   var lookup4table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','Link Type','4','5','6','7','8','9','30','1','2','3','4','5','6','Time Set','Clock set','0=Forever(sec)',
-    'Offset','H-L','H-L','43','MqttRx','RxType','Modbus Address','Modbus Address','value','if<','TYPE','','','','','55','','','','59','Time Set'];
+    'Offset','H-L','H-L','43','MqttRx','RxType','Modbus Address','Modbus Address','value','if<','TYPE','','','','','55','','','','59','Time Set','Call'];
   var lookup6table=['0','1','2','3','4','5','6','7','8','9','10','1','2','3','4','5','6','7','8','9','20',
     '1','2','ModeB','4','5','6','7','8','9','30','1','2','3','4','5','6','Time Set(Sec)','Clock set','0=Forever(sec)','40','LOW','LOW','3','Topic','Topic','6','7','Value','Echo','10']; 
   var sdata="";  
@@ -346,7 +346,8 @@ function clearfile()
     var UserDefineIn=UserDefineOut;
     
     var RTimer=
-    "<select id='rtimer' value="+id2numnotype+">\
+    "<label>"+lookup2table[type]+":</label>\
+    <select id='rtimer' value="+id2numnotype+">\
     <option value='"+id2num+"'>"+RTimerlookup[id2numnotype]+"</option>\
     <option value='"+(256+type)+"'>"+RTimerlookup[1]+"</option>\
     <option value='"+(512+type)+"'>"+RTimerlookup[2]+"</option>\
@@ -378,6 +379,20 @@ function clearfile()
     <option value='"+(1536+type)+"'>"+Countlookup[6]+"</option>\
     </select><br>" 
     
+    var group=
+    "<label>Group:</label>\
+    <select id='group' value="+id2numnotype+">\
+    <option value='"+id1num+"'>"+id2numnotype+"</option>\
+    <option value='"+(256+type)+"'>1</option>\
+    <option value='"+(512+type)+"'>2</option>\
+    <option value='"+(768+type)+"'>3</option>\
+    <option value='"+(1024+type)+"'>4</option>\
+    <option value='"+(1280+type)+"'>5</option>\
+    <option value='"+(1536+type)+"'>6</option>\
+    <option value='"+(1792+type)+"'>7</option>\
+    <option value='"+(2048+type)+"'>8</option>\
+    </select><br>"  
+
     var phin=
     "<label>"+lookup4table[type]+":</label>\
     <select id='phin' value="+id4numnotype+">\
@@ -397,12 +412,7 @@ function clearfile()
     <option value='"+(1024+type)+"'>"+phonecol[4]+"</option>\
     <option value='"+(1280+type)+"'>"+phonecol[5]+"</option>\
     </select><br>"  
-           
-    var SelMod4=
-    "<label>"+lookup4table[type]+":</label>\
-    <select id='outmode' value="+id4MOD+">\
-    <option value='"+id4num+"'>"+id4MOD+"</option>"+linkMODtype+selectend;   
-    
+              
     var Select4=
     "<label>"+lookup4table[type]+":</label>\
     <select id='outmode' value="+id4type+">\
@@ -464,10 +474,10 @@ function clearfile()
     var endst="<button class='sbut' onclick='closePopup("+type+","+xx+","+yy+")'>Submit</button>"           
     ////////////////////////////////////
     if(type===23)   sdata=autoidstdigital+Select2+Select4+commnest+endst;             //Link
-    if(type===24)   sdata=autoidstanalog+"<h7>Analog cannot multi assign</h7><br>"+commnest+"<br>"+endst;                //AOUT
-    if(type===25)   sdata=autoidstanalog+"<h7>Analog cannot multi assign</h7><br>"+commnest+"<br>"+endst;                //Ain
+    if(type===24)   sdata=autoidstanalog+"<h7>Unique ID required</h7><br>"+group+commnest+"<br>"+endst;                //AOUT
+    if(type===25)   sdata=autoidstanalog+"<h7>Unique ID required</h7><br>"+group+commnest+"<br>"+endst;                //Ain
     if(type===26)   sdata=autoidstdigital+hlst2+commnest+endst;                       //AIN CONSTANT
-    if(type>26 && type<=36)   sdata=menuidst+"<h7>Input can multi assign</h7><br>"+commnest+"<br>"+endst;            //Normal OPEN--CONSTANTswitches
+    if(type>26 && type<=36)   sdata=menuidst+"<h7>Input can multi assign</h7><br>"+group+commnest+"<br>"+endst;            //Normal OPEN--CONSTANTswitches
     if(type===37)   sdata=autoidstdigital+Unit+hlst4+commnest+endst;                  //timer   
     if(type===38)   sdata=autoidstdigital+Count+hlst4+commnest+endst;                 //counter
     if(type===39)   sdata=autoidstdigital+"<br>"+commnest+"<br>"+endst;               //FF
@@ -475,11 +485,11 @@ function clearfile()
     if(type===41)   sdata=autoidstdigital+hlst2+hlst4+commnest+endst;                 //ADC up down
     if(type===42)   sdata=autoidstdigital+hlst2+hlst4+commnest+endst;                 //COMPARATOR
     //if(type===43)   sdata=menuidst+OutputMode+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;                      //relay
-    if(type===43)   sdata=menuidst+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;  
-    if(type===44)   sdata=autoidstdigital+SelectTopic+"<h7>Topic should match RX Topic</h7><br>"+commnest+endst;                 //MQTT in
-    if(type===45)   sdata=autoidstdigital+SelectTopic+"<h7>RX topic set in Mqtt setup</h7><br>"+commnest+"<br>"+endst;               //MQTT out    
-    if(type===46)   sdata=autoidstdigital+UserDefineOut+SelMod4+commnest+endst;            //USER in
-    if(type===47)   sdata=autoidstdigital+UserDefineIn+SelMod4+commnest+endst;                  //USER out
+    if(type===43)   sdata=menuidst+"<h7>Output can multi assign</h7><br>"+group+commnest+"<br>"+endst;  
+    if(type===44)   sdata=autoidstdigital+SelectTopic+"<h7>TX topic equal to RX topic</h7><br>"+commnest+endst;                 //MQTT in
+    if(type===45)   sdata=autoidstdigital+SelectTopic+"<h7>RX topic equal to TX topic</h7><br>"+commnest+"<br>"+endst;               //MQTT out    
+    if(type===46)   sdata=autoidstdigital+UserDefineOut+hlst4+commnest+endst;            //USER in
+    if(type===47)   sdata=autoidstdigital+UserDefineIn+hlst4+commnest+endst;                  //USER out
     if(type===48)   sdata=autoidstdigital+AMath+"<br>"+commnest+endst;                //math out
     if(type===49)   sdata=autoidstdigital+"<h7>Output can multi assign</h7><br>"+commnest+"<br>"+endst;                      //relay
     if(type===50)   sdata=KeySel+phoneRowIn+phin+commnest+"<br>"+endst;               //phone in 
@@ -487,6 +497,7 @@ function clearfile()
     if(type===55)   sdata=KeySel+phoneRowIn+commnest+endst;                           //phone out
     if(type===56)   sdata=KeySel+"<br>"+commnest+"<br>"+endst;                        //API phone out  
     if(type===60)   sdata=autoidstdigital+RTimer+hlst4+commnest+endst;                //repeat timer
+    if(type===61)   sdata=autoidstdigital+group+hlst4+commnest+endst; 
     if(type===62)   sdata=autoidstdigital+commnest+endst;                             //repeat timer
     }
   }
@@ -577,6 +588,7 @@ function closePopup(type,xx,yy) {
         assignok=0;
         }
       }    
+    val2=0;  
     if(assignok===0)      
     {updataonecell(1,xx,yy,val1);  //show ID text         
     switch(type)
@@ -600,13 +612,24 @@ function closePopup(type,xx,yy) {
     case  42:            
           val2 = document.getElementById('thst2').value;   
           break; 
-    //case  43:            
-    //      val2 = document.getElementById('OutMode').value;   
-    //      break;                 
+    case  24:
+    case  25:
+    case  27:
+    case  28:
+    case  29:
+    case  30: 
+    case  33:
+    case  34:
+    case  35:
+    case  36:  
+    case  43:    
+    case  61:        
+          val2 = document.getElementById('group').value;   
+          break;                 
     case  46:
-    case  47:  
+    case  47: 
           val2 = document.getElementById('userdefine').value;   
-          break;          
+          break;           
     case  60:
           val2 = document.getElementById('rtimer').value;   
           break    
@@ -621,13 +644,14 @@ function closePopup(type,xx,yy) {
           val2 = document.getElementById('topicst').value;   
           break;             
     }
-    updataonecell(2,xx,yy,val2);
-    if(type===23 || type===46 || type===47)  //select item
+    if(val2>0)
+      updataonecell(2,xx,yy,val2);    
+    if(type===23)  //select item
       {val4 = document.getElementById('outmode').value;            
       if(val4<200) val4="256";
       updataonecell(4,xx,yy,val4);  //show text     
       }
-    if(type===37|| type===60 || type===38 || type===41 || type===42)  //A/D convert
+    if(type===37|| type===60 || type===61 || type===38 || type===41 || type===42 || type===46 || type===47)  //A/D convert
     {val4 = document.getElementById('thst4').value;           
     if(val4===null) val4=1;
     updataonecell(4,xx,yy,val4);  //show text   

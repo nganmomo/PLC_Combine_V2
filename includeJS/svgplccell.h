@@ -169,12 +169,14 @@ function updatacell()
     document.getElementById('plcsvgmain').innerHTML=Showtable;      
     window.addEventListener('scroll', function(){console.log(this.scrollY)});
     var CurY=this.scrollY-35;
-    //CurY=CurY;
     openPopup(Type,x,y);
     document.getElementById('popup').innerHTML=sdata;
     document.getElementById("popup").style.display = "block";
-    popup.style.left = (x*160)+385+'px';
-    popup.style.top = (y*80)-CurY+'px';
+    console.log((y*80)-CurY); 
+    console.log(screen.availHeight);               
+    popup.style.left = (x*160)+385+'px';   
+    if(((y*80)-CurY)>(screen.availHeight-400)) y--;              
+    popup.style.top = (y*80)-CurY+'px';    
     //popup.style.display = 'flex';   
     }      
   }
@@ -240,7 +242,7 @@ function checksyntax(lookup,x,y)
     //  document.getElementById('ulbutton').style.color="black";                                     
     //  filldata(cursor,x,y,'yellow','yellow');                              
     if(lookup<65)      //sign legal limit  control
-        {if(y===0 && (lookup===2 || lookup===8 || lookup===15))   //last colum pin 
+        {if(y===0 && (lookup===8 || lookup===15))   //last colum pin 
           {window.alert("cannot not put this on top row")                         
           isexit=2;
           }
@@ -266,7 +268,7 @@ function checksyntax(lookup,x,y)
         if(isexit===1)    
         {switch(x)
           {case  0:          
-            let testarray0=[4,16,23,25,26,28,29,30,36,40,41,45,47,48,49,50,55,60,62];
+            let testarray0=[4,16,23,25,26,28,29,30,36,40,41,45,47,48,49,50,55,60,61,62];
             for(tv=0;tv<testarray0.length;tv++)  
               {if(testarray0[tv]===lookup)
                 {isexit=0;
@@ -287,7 +289,7 @@ function checksyntax(lookup,x,y)
                     }                   
                   break;                                            
             case  5:
-              let testarray5=[2,43,49,24,55,44,46];  
+              let testarray5=[2,8,43,49,24,55,44,46,61];  
               for(tv=0;tv<testarray5.length;tv++)  
                 {if(testarray5[tv]===lookup)
                   {isexit=0;
@@ -352,10 +354,10 @@ else
             {let typebefore=0;
             if(x>0)
               typebefore=serialcelldata[(x-1)*8+y*48];
-            //if((typeused[typebefore]&1)!=1)          
-            //  {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
-            //  error++;
-            //  }
+            if((typeused[typebefore]&1)!=1)          
+              {window.alert("The Mqtt-input must follow an output device\n not a connect line"); 
+              error++;
+              }
             }
           switch (type)
           {

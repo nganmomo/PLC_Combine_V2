@@ -1,6 +1,6 @@
 static const char PROGMEM INDEX_HTML_Linkhardware[] = R"rawliteral(
-//var URL="192.168.1.95:8088";
-var  URL=window.location.host;
+var URL="192.168.1.95:8088";
+//var  URL=window.location.host;
 var xhttp = new XMLHttpRequest();
 var rxcode="";
 var bufferz0 = Array(245).fill(0);   //242
@@ -246,7 +246,11 @@ else
     updatetable(FILLALL);       
     timeoutmessage="Hareware will not keep comment, Please use file to keep comment\n download successful";           
     document.getElementById('labelul').style.backgroundColor="#333333";
-    }    
+    }
+  //else
+  //  {
+  //  window.alert("Please set time clock and try again"); 
+  //  }            
   }  
 } 
 
@@ -443,7 +447,6 @@ var xhtp = new XMLHttpRequest();
   xhtp.open("GET","http://"+URL+"/action?go="+txdata, true);     
   xhtp.send();  
 }
-
 
 
 ////////////////////run and update//////////////////////

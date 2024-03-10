@@ -1,4 +1,4 @@
-#include "plcsvg.h"
+#include "../include/plcsvg.h"
 //for timer for phone password timeout
 char phonepw[16];
 char Storephonepw[16];
@@ -487,3 +487,31 @@ for(byte i=0;i<12;i++)
   text[i]=lookup[text[i]];
   } 
 }
+
+#ifdef  uart1
+void SerialRTXLoop(char* buffer,byte length)
+{length=length+1;
+STXbuffer[0]=0x5a;
+Srxcount=0;
+Serial1.write(STXbuffer,length);
+}
+
+
+uint16_t uartmaster(int length)     //master
+{byte rxd;
+length=length+1;
+int y;
+for(y=0;y<50000;y++)  
+  {if (Serial1.available() && Srxcount<=length) {   
+      rxd=Serial1.read();
+      if(Srxcount==0 && rxd==0x5a) Srxcount=0;
+      SRXbuffer[Srxcount] = rxd;         
+      Serial.print(SRXbuffer[Srxcount],DEC);
+      Srxcount++;       
+      if(Srxcount>=length)          
+      break;
+      }  
+  }  
+  return y;  
+}
+#endif

@@ -14,8 +14,8 @@
 //#define CreateUnicode
 #define CheckUnicode    //software lock security
 //*******************************//
-#define wssencode   //lock to MqttWss.cpp
 #define ver2    
+
 //#define chphpw      //bypass check phone password
 //#define uart1       //software uart   
 
@@ -54,7 +54,7 @@
 #define keychar     2084        //400
 #define unicode     2484        //16
 #define timeclock   2450        //500
-#define NotAssign   2950        //
+#define mqttpass    2950        //
 #define EEPROM_SIZE 3072        //
 
 //https://www.espressif.com/sites/default/files/documentation/esp32-s3_hardware_design_guidelines_en.pdf
@@ -90,6 +90,9 @@
 #define Ain3 11
 #define Ain4 12
 
+#define SETUPSTATE  1                //17
+#define Enmqttclient  16           //RUN OR SIM BUTTON    
+#define mqttbrokenpin  15
 #define setuppin  13
 #endif
 #ifdef ver2     //squre board
@@ -129,6 +132,8 @@
 
 #define setuppin    1         //SETUP BUTTON
 #define pw_enable_sw   2 
+#define Enmqttclient  16   
+#define mqttbrokenpin  15 
 
 //#define mqttbrokenpin  37
 //#define mqttclientpin  38
@@ -345,8 +350,6 @@ extern void readinput(uint32_t realtimeloop,byte Lasty);
 extern void updateinstate(uint32_t realtimeloop,byte lasty);
 extern void ioinit();
 ///////MQTT//////////
-//void brokersetup(int port);
-//void brokerloop();
 extern void connectToMqtt();
 extern void clientsetup(byte mqtt);
 extern char MYTOPIC[5][64];  // = "mytopic2";
@@ -437,9 +440,13 @@ extern char encrytext[12];
 extern char comparetext[12];
 extern uint64_t chipId;
 extern void encrypt(char* encrytext,uint64_t chipId);
+extern void brokersetup(int port);
+extern void brokerloop();
 /*
 void anykey(int test,int point1,int point2);
 Serial.println("anykey");  
 while (!Serial.available());
 Serial.read();
 */
+//void brokersetup(int port);
+//void brokerloop();

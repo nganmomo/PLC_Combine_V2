@@ -1,4 +1,4 @@
-#include "plcsvg.h"
+#include "../include/plcsvg.h"
 #include "icontext.h"
 #include "homehw.h"
 #include "filehandle.h"
@@ -721,11 +721,8 @@ void loop() {
       Runmode=1;
       }
     if((realtimeloop&0x1fff)==0x1fff)  
-      { 
-      #ifdef  wssencode
+      {     
       connectToMqtt();
-      //connectToMqtt();
-      #endif
       }  
     if((realtimeloop&0xffff)==0xffff)  //0xffff
       {esp_task_wdt_reset();                         

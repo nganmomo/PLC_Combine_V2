@@ -1,4 +1,4 @@
-#include "plcsvg.h"
+#include "../include/plcsvg.h"
 
 #define   LANPulse  1
 #define   LANtoggle 2
@@ -725,8 +725,8 @@ void HandleDevice(byte type,byte x,byte y,uint32_t realtimeloop)
     break;
   case  55:      //mobile out for LAN only old=49        
     if(Rbuttonmode==pin && Rbuttonnum==dataz2[x][y])         //match col and row
-      {Serial.print("phonebufC=");
-      Serial.println(Rbuttonmode);             
+      {//Serial.print("phonebufC=");
+      //Serial.println(Rbuttonmode);             
       int t=0;    //process result
       //phonebuf[t++]='A';phonebuf[t++]=':';phonebuf[t++]='=';                                                                                                           
       displaymess="A:";

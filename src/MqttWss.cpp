@@ -1,7 +1,6 @@
-#include <plcsvg.h>
+#include "../include/plcsvg.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
-#ifdef wssencode
 char mqtt_port_char[6];
 char ISMASTER[5]; 
 char MYTOPIC[5][64];  // = "mytopic2";
@@ -166,14 +165,14 @@ connectToWifi();
 
 void connectToWifi()
 {
-//if((WiFi.status() != WL_CONNECTED))
+if((WiFi.status() != WL_CONNECTED))
   {Serial.println("Connect to Mqtt with encrypt"); 
   WiFi.mode(WIFI_STA);
-#ifdef  BYPASSSETUP 
-  WiFi.begin("ATT3jl8Tns","6mrk8iyf26vn");
-#else
+//#ifdef  BYPASSSETUP 
+//  WiFi.begin("ATT3jl8Tns","6mrk8iyf26vn");
+//#else
   WiFi.begin(&mssid[0],&mpass[0]);
-#endif 
+//#endif 
   }
 }
 
@@ -443,6 +442,3 @@ if(EPLCMQTT[0]=='1')
     } 
   } 
 }
-
-
-#endif

@@ -1,6 +1,6 @@
 static const char PROGMEM INDEX_HTML_Linkhardware[] = R"rawliteral(
-var URL="192.168.1.95:8088";
-//var  URL=window.location.host;
+//var URL="192.168.1.95:8088";
+var  URL=window.location.host;
 var xhttp = new XMLHttpRequest();
 var rxcode="";
 var bufferz0 = Array(245).fill(0);   //242

@@ -1,4 +1,4 @@
-#include "plcsvg.h"
+#include "../include/plcsvg.h"
 #include "icontext.h"
 #include "homehw.h"
 #include "filehandle.h"
@@ -34,6 +34,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", timeZone * 3600, 60000);
 //const int counterPin = 7;  // Replace with the GPIO pin you want to use as the counter input
 //volatile int counterValue = 0;
 //////////HW COUNTER///////
+//MqttBroker
+//char mqtpass[10];
+//MqttBroker
 #ifdef  uart1
 uint16_t uartmaster(int length); 
 void SerialRTXLoop(char* buffer,byte length);
@@ -219,7 +222,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     {//Serial.println("key");
     int t;
     if(variable[3]=='s')
-      {//mobile.js   http://192.186.1.84:8088/KEYS                      
+      {//mobile.js   http://192.168.1.84:8088/KEYS                      
       eewbyte(keychar,&variable[4],350);       
       for(t=60;t<350;t++)      
         {if(variable[t]=='*' && variable[t+1]=='^' && variable[t+2]=='^')
@@ -268,7 +271,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     if(variable[3]=='t')
       numchartowrite=cellkeyboard(DPLAY);      
     displaymess.toCharArray(&variable[4],displaymess.length()+1);  
-    numchartowrite=displaymess.length()+4;   //http://192.186.1.84:8088/MOB   feedback unchange   
+    numchartowrite=displaymess.length()+4;   //http://192.168.1.84:8088/MOB   feedback unchange   
     Runmode=1;   
     }
   if(variable[0]=='s' && variable[1]=='w' && variable[2]=='u') //switch simulation Tested
@@ -438,7 +441,7 @@ void starthttpServer(){
 
   if (httpd_start(&controller_httpd, &config) == ESP_OK) {   
     httpd_register_uri_handler(controller_httpd, &index_uri12);  //step4
-    httpd_register_uri_handler(controller_httpd, &index_uri11);  //step4
+    httpd_register_uri_handler(controller_httpd, &index_uri11);  
     httpd_register_uri_handler(controller_httpd, &index_uri10);   
     httpd_register_uri_handler(controller_httpd, &index_uri9);
     httpd_register_uri_handler(controller_httpd, &index_uri8);
@@ -477,10 +480,10 @@ void downloadinit()
     //genlinktable();              
     ioinit();        //0 if not coolboot from 0 
     esp_task_wdt_init(1,true);   
-    esp_task_wdt_add(NULL); 
-    delay(1500);
+    esp_task_wdt_add(NULL);  //gen reset signal
+    delay(1500);    //create timeout reset
     //coolboot();
-    //Serial.println("Cool boot");   
+    Serial.println("Cool boot");   
     Runmode=1;   
     esp_task_wdt_init(20,true);   
     esp_task_wdt_add(NULL);            
@@ -495,8 +498,9 @@ digitalWrite(COOLBOOT,LOW);
 void setup(){   
   // Initialize the watchdog timer with a timeout of 10 seconds  
   esp_task_wdt_init(20, false);   //false to stop watch dog timer -> turn on is true
-  esp_task_wdt_add(NULL); 
+  esp_task_wdt_add(NULL);         //reset when 20 second over
   pinMode(setuppin,INPUT_PULLUP); 
+  
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector 
   Serial.begin(115200);
   Serial.setDebugOutput(false); 
@@ -504,6 +508,7 @@ void setup(){
   Serial1.begin(115200, SERIAL_8N1, SERIAL1_TX_PIN, SERIAL1_RX_PIN);     
   #endif
   Serial.println("///////////////Donkey PLC setup information///////////////");  
+  //MqttBroker
   if(pw_enable_sw!=0)  //On or OFf passward check//
     {pinMode(pw_enable_sw,INPUT_PULLUP);
     if(digitalRead(pw_enable_sw)==1)  
@@ -511,13 +516,15 @@ void setup(){
     else
       Serial.println("Password Setup switch is in LOCK position");    
     }  
+  //modify in sMQTTBroker.cpp 
   ///////////////////////////////  
-  Serial.println("Designed by Maxtron Lab.");  
+  Serial.println("Designed by DonKey Lab.");  
   eerpassid(eessid,mssid,mpass);
   if(mssid[0]>=0x30 && mssid[0]<0x7e)
   {Serial.println(mssid);
   Serial.println(mpass); 
   }   
+
   if(digitalRead(setuppin)==SETUPSTATE)  //setup mode
     {byte key; 
     setupmode=1;   
@@ -554,18 +561,17 @@ void setup(){
     MYPASSWORD.toCharArray(mpass,MYPASSWORD.length()); 
     eewpassid(eessid,mssid,mpass);
     //while (!Serial.available());
-    while (digitalRead(setuppin)==SETUPSTATE);
+    while (digitalRead(setuppin)==SETUPSTATE);      //wait for key release
     }
-  else    
+  else    //below no setup require
     eerpassid(eessid,mssid,mpass);                    
   //#ifdef    MQTTACTIVE       
     getdata(1,6,EPLCMQTT);
-    getdata(2,6,EPHMQTT); 
+    getdata(2,6,EPHMQTT);     
     if(EPHMQTT[0]=='1'|| EPLCMQTT[0]=='1')
-      clientsetup(1);
+      clientsetup(1);     //connect to wifi and Mqtt
     else                
-      clientsetup(0);//
-  //#endif     
+      clientsetup(0);     //connect to wifi only  
   while(wificonnected==0) 
   {Serial.print('.');
   if(connectcount++>512)
@@ -573,16 +579,18 @@ void setup(){
       Serial.println("Unable to connect network, reenter check password and id"); //add check mqtt and bypass if necessory    
       }
   delay(20);
-  }
+  } 
   if(mqttconnected)
     Serial.println("Mqtt connected");         
   else
     Serial.println("Waiting for Mqtt connect");      
-  #ifdef CreateUnicode
+  //////////
+    #ifdef CreateUnicode
     uint64_t chipId = ESP.getEfuseMac();
     encrypt(encrytext,chipId);    
     eewbyte(unicode,encrytext,12);      
     #endif
+  //////////  
     #ifdef  CheckUnicode
     uint64_t chipId = ESP.getEfuseMac();    
     byte tc;
@@ -597,6 +605,7 @@ void setup(){
     else
        Serial.println("MCU Unicode match");    
     #endif
+  /////////  
   timeClient.begin(); 
   Serial.println("WiFi connected");
   Serial.print("Donkey Lab PLC Ready! Go to: http://");  
@@ -657,33 +666,7 @@ for(h=1;h<=MaxIn;h++)
   pinMode(Pinin[h],INPUT_PULLUP);             
 }
 
-#ifdef  uart1
-void SerialRTXLoop(char* buffer,byte length)
-{length=length+1;
-STXbuffer[0]=0x5a;
-Srxcount=0;
-Serial1.write(STXbuffer,length);
-}
 
-
-uint16_t uartmaster(int length)     //master
-{byte rxd;
-length=length+1;
-int y;
-for(y=0;y<50000;y++)  
-  {if (Serial1.available() && Srxcount<=length) {   
-      rxd=Serial1.read();
-      if(Srxcount==0 && rxd==0x5a) Srxcount=0;
-      SRXbuffer[Srxcount] = rxd;         
-      Serial.print(SRXbuffer[Srxcount],DEC);
-      Srxcount++;       
-      if(Srxcount>=length)          
-      break;
-      }  
-  }  
-  return y;  
-}
-#endif
 //byte test=0;
 //unsigned long timeinsecond;
 //unsigned long timeDayofYear;
@@ -693,7 +676,7 @@ void loop() {
   //  {phoneelapsedTime=millis()-phonestartTime;  
   //  if(phoneelapsedTime>60000)
   //    ctlpermit=0;
-  //  }
+  //  } 
   if(Runmode==2)
     {Serial.println("IO init 2");  
       downloadinit(); 
@@ -712,14 +695,11 @@ void loop() {
       Runmode=1;
       }
     if((realtimeloop&0x1fff)==0x1fff)  
-      { 
-      #ifdef  wssencode
-      connectToMqtt();
-      //connectToMqtt();
-      #endif
+      {           
+      connectToMqtt();                  
       }  
     if((realtimeloop&0xffff)==0xffff)  //0xffff
-      {esp_task_wdt_reset();                         
+      {esp_task_wdt_reset();     //rest wdt                    
       if(wificonnected)// && (test<5 || test>10))
         {timeClient.update();                        
         //get time details

@@ -1,7 +1,6 @@
-#include <plcsvg.h>
+#include "../include/plcsvg.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
-#ifdef wssencode
 char phonetopic[60];
 char mqtt_port_char[6];
 char MYTOPIC[5][64];  // = "mytopic2";
@@ -392,6 +391,3 @@ if(EPLCMQTT[0]=='1')
     } 
   } 
 }
-
-
-#endif

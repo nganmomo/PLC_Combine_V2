@@ -84,13 +84,15 @@ byte cellkeyboard(byte work)    //kin or display
 byte y; 
 byte Len=0;     //process request  
 byte ret=0;
+Serial.print("work=");  
+Serial.println(work);  
 if(work==VERIFY)
 {
 #ifdef  chphpw
-  {//Serial.print("variable[6]=");
-  //Serial.println(&variable[6]);
-  //Serial.print("Storephonepw=");
-  //Serial.println(Storephonepw);  
+  {Serial.print("variable[6]=");
+  Serial.println(&variable[6]);
+  Serial.print("Storephonepw=");
+  Serial.println(Storephonepw);  
   for(y=0;y<10;y++)
     {if(variable[y+6]!=Storephonepw[y])
       break;
@@ -112,7 +114,7 @@ if(work==VERIFY)
 #endif 
 variable[3]='d';    //display required   
 }
-if(work==DWORK)
+if(work==DWORK && ctlpermit==1)
   {buttonnum=variable[4]-0x30; //0-8 Y
   buttonmode=variable[5]-0x30; //0-5 X     
   Rbuttonnum=variable[4]-0x30; //0-8 Y
@@ -486,6 +488,14 @@ for(byte i=0;i<12;i++)
   X=X>>2;
   text[i]=lookup[text[i]];
   } 
+}
+
+void loaddefaultvalue()
+{char cleardata[6] = {'#','#','#','#','#','#'};  //600 
+eewbyte(timeclock,cleardata,6);
+eewbyte(MQSTdata,cleardata,6);
+eewbyte(keychar,cleardata,6);
+Serial.println("loaddefault");
 }
 
 #ifdef  uart1

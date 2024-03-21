@@ -107,7 +107,7 @@ divc1.addEventListener('contextmenu', (e) => {e.preventDefault()});
 divc2.addEventListener("contextmenu", (e) => {e.preventDefault()});   
 window.onload = async function(){         
   //CheckHWStatus('MCC'); //comment to bypass login
-  Sceret=1;  //uncomment to bypass login
+  var Sceret=1;  //uncomment to bypass login
   ////////////////
   updatacell();  
   try
@@ -125,8 +125,11 @@ window.onload = async function(){
   document.getElementById('HINTS').innerHTML=svghints[0];
   document.getElementById('hintscont').style.height=h-520+'px'; 
   //CheckHWStatus();
-  document.getElementById('textw').innerHTML="Pick one to place";
+  document.getElementById('textw').innerHTML="Pick one to place";  
   showedit(1); //close edit bar
+  //////////////
+  checksetup();     //callFunctionsStepByStep();
+  /////////////////  
 }  
 
 var dailog=document.getElementById("dialog"); 
@@ -165,6 +168,42 @@ if(x===1 || x===2)
     document.getElementById('tablecont').style.width=1042+'px';   
     }
 updatetable(FILLALL);  
+}
+
+//const functions = [changeframe(1), changeframe(2), changeframe(3), changeframe(4), showedit(1)];
+
+// Function to call the functions step by step at 5-second interval
+function callFunctionsStepByStep() {
+    let index = 0;
+    const intervalId = setInterval(() => {
+        if (index < 6) {           
+            if(index===5)  
+              showedit(1);   
+            else
+              {if(index!=1)
+              changeframe(index);
+              }
+            index++;
+        } else {
+            clearInterval(intervalId);
+        }
+    }, 1000); // 5 seconds interval 
+}
+
+function checksetup()  //txdata= "MQSD"
+{//MQSU MQSD   
+URL=window.location.host; 
+ var xhtp = new XMLHttpRequest(); 
+  xhtp.onreadystatechange = function() { 
+  let tc=0;
+  if(this.readyState == 4 && this.status == 200) {      
+    let txre=this.responseText[0]+this.responseText[1]+this.responseText[2]+this.responseText[3];                                       
+    if(txre==="mQsD" && this.responseText[4]==='#' && this.responseText[5]==='#')   //mQsU is Download       
+        callFunctionsStepByStep();
+      }                           
+    }     
+  xhtp.open("GET","http://"+URL+"/action?go=" + "MQSd", true);     
+  xhtp.send();  
 }
 </script>
 )rawliteral";

@@ -1,4 +1,4 @@
-static const char PROGMEM INDEX_HTML_mobile[] = R"rawliteral(  
+static const char PROGMEM INDEX_HTML_mobile[] = R"rawliteral(
 <!DOCTYPE html>
 <body>
 <div id=mobilekey></div>
@@ -60,52 +60,59 @@ function toggleCheckbox() {
 xhr.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {     
     if(this.responseText[3]=='R')
-      {let j=0;
-      for(j=4;j<this.responseText.length;j++)
-        {if(this.responseText[j]=='@' && k<55)// && this.responseText[j+2]=='%')
-          {document.getElementById('rmtt'+k).value=keyv;               
-          k++;
-          keyv="";                 
+      {if(this.responseText[4]==='#' && this.responseText[5]==='#')
+        {loaddefaultA();            
+        localStorage.removeItem('plcdata'); 
+        console.log('localStorage.removeItem2');        
+        }
+      else
+        {let j=0;
+        for(j=4;j<this.responseText.length;j++)
+          {if(this.responseText[j]=='@' && k<55)// && this.responseText[j+2]=='%')
+            {document.getElementById('rmtt'+k).value=keyv;               
+            k++;
+            keyv="";                 
+            }   
+          else    
+            keyv=keyv+this.responseText[j];        
+          //password                           
+          if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='^')  
+            {let phpval="";
+            for(let t=3;t<35;t++)
+                {phpval=phpval+this.responseText[j+t];
+                if(this.responseText[j+t]==='@')
+                  break;
+                }
+            document.getElementById('mqtopic').value=phpval;  
+            localStorage.setItem('stmqtopic',phpval);                       
+            }       
+          if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='^')  
+            {mxsetdev=this.responseText[j+3];
+            mysetdev=this.responseText[j+4];                    
+            updaterowscols(1);              
+            }         
+          if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='*')  
+            {let phpval="";
+            for(let t=3;t<11;t++)
+                {phpval=phpval+this.responseText[j+t];
+                if(this.responseText[j+t]==='@')
+                  break;
+                }
+            document.getElementById('phpw').value=phpval;   
+            localStorage.setItem('stmpwapw',phpval);           
+            }
+          if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='*')  
+            {let phpval="";
+            for(let t=3;t<11;t++)
+                {phpval=phpval+this.responseText[j+t];
+                if(this.responseText[j+t]==='@')
+                  break;
+                }
+            //document.getElementById('editpw').value=phpval;                        
+            break;
+            }                           
           }   
-        else    
-          keyv=keyv+this.responseText[j];        
-        //password                           
-        if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='^')  
-          {let phpval="";
-          for(let t=3;t<35;t++)
-              {phpval=phpval+this.responseText[j+t];
-              if(this.responseText[j+t]==='@')
-                break;
-              }
-          document.getElementById('mqtopic').value=phpval;  
-          localStorage.setItem('stmqtopic',phpval);                       
-          }       
-        if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='^')  
-          {mxsetdev=this.responseText[j+3];
-          mysetdev=this.responseText[j+4];                    
-          updaterowscols(1);              
-          }         
-        if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='*')  
-          {let phpval="";
-          for(let t=3;t<11;t++)
-              {phpval=phpval+this.responseText[j+t];
-              if(this.responseText[j+t]==='@')
-                break;
-              }
-          document.getElementById('phpw').value=phpval;   
-          localStorage.setItem('stmpwapw',phpval);           
-          }
-        if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='*')  
-          {let phpval="";
-          for(let t=3;t<11;t++)
-              {phpval=phpval+this.responseText[j+t];
-              if(this.responseText[j+t]==='@')
-                break;
-              }
-          //document.getElementById('editpw').value=phpval;                        
-          break;
-          }                           
-        }   
+        }
       }
     if(this.responseText[3]=='o')
       {
@@ -142,14 +149,19 @@ document.getElementById('mqtopic').value=makeid(32);
 ///////////////////////////////////////////////////////
 function loaddefaultA()
 {//loadkeytable2();
+const words = ['A', 'B', 'C', 'D', 'E'];
 for(var t=1;t<=8;t++)
   {for(var j=1;j<=6;j++)
     {if(j<6)
-        document.getElementById('rmtt'+(j+t*6)).value=t;   
+        document.getElementById('rmtt'+(j+t*6)).value=t+words[j-1];                   
       else  
         document.getElementById('rmtt'+(j+t*6)).value=100;              
     }
   } 
+
+mysetdev=2;
+mxsetdev=2;
+updaterowscols(1);
 document.getElementById('phpw').value="1a2b3c4d"; 
 //document.getElementById('editpw').value="a1b2c3d4"; 
 document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";                       
@@ -289,7 +301,7 @@ var mobilekey=
 <h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"
 
 window.onload = async function(){         
-  //URL="192.168.1.95:8088";
+  //URL="192.168.1.90:8088";
   URL=window.location.host;  
   console.log(URL);
   console.log('11ter',mcell);  

@@ -73,10 +73,11 @@ function savetoedit()
 
 window.onload = async function(){ 
   var test="";  
-  var Length=0; 
+  var Length=0;  
   var  rplcdata=localStorage.getItem('plcdata');     
   console.log('rplcdata=',rplcdata);
-  for(var t=0;t<rplcdata.length;t++)  //calculate length;
+  if(rplcdata!=null)
+  {for(var t=0;t<rplcdata.length;t++)  //calculate length;
     {if((rplcdata[t]>='/' && rplcdata[t]<='~' && rplcdata[t]!=']' && rplcdata[t]!='[')|| rplcdata[t]===' ')
       {//console.log('print=',rplcdata[t]);                  
       Length=t;      
@@ -92,7 +93,7 @@ window.onload = async function(){
           }
         }
       }           
-    } 
+    }     
   //console.log("Length=",Length);   
   //console.log("rplcdata=",rplcdata);   
   for(var t=0;t<Length+3;t++)
@@ -104,15 +105,24 @@ window.onload = async function(){
       }      
     else if(rplcdata[t]===',')
       test=test+',';  
-    }    
+    }        
   if(rplcdata!=null)
     {//document.getElementById("values").innerText=rplcdata;
     document.getElementById("values").innerText=test;
     console.log('doplcdata=',test);
     }
+  }  
   //else
   //  document.getElementById("dtarea").innerText="No data";  
+  //  document.getElementById("values").innerText="No data";  
+  //loaddefault  
+  if(rplcdata===null)
+  {document.getElementById("output").innerText="50,306,256,0,256,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,43,299,299,0,,,,,50,306,562,0,306,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,43,555,299,0,,,,,50,562,256,0,256,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,43,811,299,0,,,,,50,562,562,0,306,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,,,,4,,,,,43,1067,299,0,";  
+  savetoedit(); 
+  }
 }
+
+
 var input = document.getElementById("myFile");
 var output = document.getElementById("output");
 

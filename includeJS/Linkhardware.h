@@ -352,9 +352,9 @@ function retrieve(datatosend,buffer) {
 function uploadesp(datatosend,Length) { 
   if(tryonline===1)
     window.alert("This function required hardware");
-  {if(Sceret===0)
-      window.alert("Please login before upload\n, refresh to login page");
-    else
+  {//if(Sceret===0)
+    //  window.alert("Please login before upload\n, refresh to login page");
+    //else
     {if(datatosend==='swur')
          {document.getElementById('labelul').style.backgroundColor="aliceblue";  
          document.getElementById('labelul').style.width="130px";
@@ -474,7 +474,7 @@ function CheckHWStatus(x) {
         //document.getElementById("botstatus").style.color ="yellow";
         }
       else
-        {document.getElementById("botstatus").innerText ="NORMAL";                        
+        {document.getElementById("botstatus").innerText ="NOMQTT";                        
         //document.getElementById("botstatus").style.color ="yellow";      
         window.alert("Check mqtt switch and wifi");
         }

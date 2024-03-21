@@ -63,8 +63,12 @@ byte buttonmode;
 byte Rbuttonnum=0;
 byte Rbuttonmode;
 byte Pinout[9]={0,Pout1,Pout2,Pout3,Pout4,Pout5,Pout6,Pout7,Pout8};
+#ifdef  MaxIn
 byte Pinin[9]={0,Pin1,Pin2,Pin3,Pin4,Pin5,Pin6,Pin7,Pin8};
+#endif
+#ifdef  MaxAin
 byte analogpin[5]={0,Ain1,Ain2,Ain3,Ain4};
+#endif
 //byte analogpout[5]={Aout0,Aout1,Aout2,Aout3,Aout4};
 
 String MYSSID = "";
@@ -264,7 +268,9 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     ReturnSign='y';   //numchartowrite default 6   
     }      
   if(variable[0]=='m' && variable[1]=='o' && variable[2]=='b') //mobile   mobo96 verify password
-    {if(variable[3]=='o')
+    {Serial.print("mobo");  
+    Serial.println(variable); 
+      if(variable[3]=='o')
       numchartowrite=cellkeyboard(VERIFY);  //staticpromipcw.h local remote.js    
     if(variable[3]=='k')
       numchartowrite=cellkeyboard(DWORK); 
@@ -525,10 +531,14 @@ void setup(){
   Serial.println(mpass); 
   }   
 
+  Serial.print("setuppin=");  
+  Serial.println(digitalRead(setuppin));  
+
   if(digitalRead(setuppin)==SETUPSTATE)  //setup mode
-    {byte key; 
+    {byte key,count=0; 
     setupmode=1;   
     eerbyte(0,&STXbuffer[1],50);
+    loaddefaultvalue();
     #ifdef  uart1
     SerialRTXLoop(STXbuffer,50);    
     if(uartmaster(50)>40000)
@@ -536,18 +546,20 @@ void setup(){
     #endif  
       Serial.print("Input ssid=");  
       do{if (Serial.available() > 0) {
-        key = Serial.read();
+        key = Serial.read();               
         MYSSID=MYSSID+static_cast<char>(key);
+        count++;
         }
-        }while(key!=0xd && key!=0xa);
+        }while(key!=0xd && key!=0xa);        
       Serial.println(MYSSID);  
       key=0;
       Serial.print("Input password=");
       do{if (Serial.available() > 0) {
         key = Serial.read();
         MYPASSWORD=MYPASSWORD+static_cast<char>(key);
+        count++;
         }
-        }while(key!=0xd && key!=0xa);           
+        }while(key!=0xd && key!=0xa);       
     eerbyte(eessid,&STXbuffer[1],50);  //data to link Broker board 
     #ifdef  uart1
     SerialRTXLoop(STXbuffer,50);
@@ -557,10 +569,11 @@ void setup(){
     Serial.println(MYPASSWORD);  
     Serial.println("To run program set switch to run position and press reset to start program");
     Serial.println("To change SSID or password set switch setup position and press reset");
-    MYSSID.toCharArray(mssid,MYSSID.length());
-    MYPASSWORD.toCharArray(mpass,MYPASSWORD.length()); 
+    if(count>10)
+    {MYSSID.toCharArray(mssid,MYSSID.length());
+    MYPASSWORD.toCharArray(mpass,MYPASSWORD.length());     
     eewpassid(eessid,mssid,mpass);
-    //while (!Serial.available());
+    }  
     while (digitalRead(setuppin)==SETUPSTATE);      //wait for key release
     }
   else    //below no setup require
@@ -662,8 +675,10 @@ for(h=1;h<=MaxOut;h++)
   {pinMode(Pinout[h],OUTPUT);                     
   digitalWrite(Pinout[h],HIGH);
   }
+#ifdef MaxIn
 for(h=1;h<=MaxIn;h++)   
   pinMode(Pinin[h],INPUT_PULLUP);             
+#endif  
 }
 
 
@@ -695,8 +710,7 @@ void loop() {
       Runmode=1;
       }
     if((realtimeloop&0x1fff)==0x1fff)  
-      {           
-      connectToMqtt();                  
+      {connectToMqtt();                  
       }  
     if((realtimeloop&0xffff)==0xffff)  //0xffff
       {esp_task_wdt_reset();     //rest wdt                    

@@ -367,7 +367,7 @@ else
           case 42: case 43: case 44: case 45: case 46:
           case 47: case 50: case 55: case 60:
           if(idtext==="" || (idtext>>8)===0)      
-              {message="No Device Id for x="+(x+1)+" y="+(y+1);
+              {message="Missing data in column 1 x="+(x+1)+" y="+(y+1);
               window.alert(message);
               error++;
               }
@@ -396,20 +396,20 @@ else
   }
 }
 
-function changeframe(fsel) {
+function changeframe(fsel,Sceret) {
 if(tryonline===1 && (fsel===2 || fsel===3))
   window.alert("This function required hardware");
 else
   {//if(Sceret===0 && fsel!=3)  except phone
-  if(Sceret===0)  //include phone  
-    {if(fsel===4)
-      window.alert("Please login before File handle\n refresh this page to login");
-    if(fsel===3)
-      window.alert("Please login or move Admin switch in setup position\n before Phone setup\n refresh this page to login");    
-    if(fsel===2)
-      window.alert("Please login before Mqtt setup\n refresh this page to login");  
-    }
-  else      
+  //if(Sceret===0)  //include phone  
+  //  {if(fsel===4)
+  //    window.alert("Please login before File handle\n refresh this page to login");
+  //  if(fsel===3)
+  //    window.alert("Please login or move Admin switch in setup position\n before Phone setup\n refresh this page to login");    
+  //  if(fsel===2)
+  //    window.alert("Please login before Mqtt setup\n refresh this page to login");  
+  //  }
+  //else      
     {statbuf=""; //clear status                  
     if(fsel===0)
         {document.getElementById('closeul').style.visibility='visible';

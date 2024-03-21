@@ -6,34 +6,27 @@ static const char PROGMEM INDEX_HTML_homeweb[] = R"rawliteral(
 
 <!--Begin of selection -->
 
-<link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
-<script src="https://ipcworld.w3spaces.com/SVGPLC/icontext.js"></script>  
-<script src="https://ipcworld.w3spaces.com/SVGPLC/svgplccell.js"></script>    
-<script src="https://ipcworld.w3spaces.com/SVGPLC/Property.js"></script> 
-<script src="https://ipcworld.w3spaces.com/SVGPLC/Linkhardware.js"></script>
-<script src="https://ipcworld.w3spaces.com/SVGPLC/helppopup.js"></script> 
-<link rel="stylesheet" href="https://ipcworld.w3spaces.com/SVGPLC/css/plcsvg.css">
+link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/icontext.js"></script>  
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/svgplccell.js"></script>    
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Property.js"></script> 
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Linkhardware.js"></script>
+<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/helppopup.js"></script> 
+<link rel="stylesheet" href="https://ipcworld.w3spaces.com/SVGPLC/PLC/css/plcsvg.css"      
 
-<!--
-<link href='http://ipcworld.online/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
-<script src="icontext.js"></script> 
-<script src="svgplccell.js"></script>     
-<script src="Property.js"></script>    
-<script src="Linkhardware.js"></script>   
-<script src="helppopup.js"></script>      
-<link rel="stylesheet" href="css/plcsvg.css">  
--->
+
 <!--End of selection -->
 <script>
 //var tryonline=1;      //Require hardware
 var tryonline=0;    //Not require hardware
+var mqupdate=0;
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
 
-<div class="navbar"> 
-    <button style="margin-left:25px" onclick="history.back()">homehw</button>
+<div class="navbar">     
+    <button style="margin-left:25px" onclick="history.back()">HOME</button>
     <button type="button" class="botstatus" id="botstatus" onclick="CheckHWStatus(0)" >STATUS</button>   
     <button type="button" class="plcedit" id="plcedit" onclick="showedit(1)" >Edit page</button>   
     <button type="button" class="botcl" onclick="clearfile()" >clear</button>    
@@ -54,7 +47,7 @@ var tryonline=0;    //Not require hardware
       <div class="container" id="hintscont">
       <div id="HINTS"></div>               
       </div>   
-    </div>    
+    </div>  
 </div>
 
 <!-- Page Content -->
@@ -82,15 +75,16 @@ var tryonline=0;    //Not require hardware
 <script>
 //var tryonline=0;
 var systemtype=1;
-//var URL="192.168.1.84:8088";
+//var systemtype=1;   //use esp32 internal file
+//var URL="192.168.1.95:8088";
 var URL=window.location.host; 
 var Showtable = "";
 var divc1 = document.getElementById('piccont'); 
 var divc2 = document.getElementById('tablecont'); 
 divc1.addEventListener('contextmenu', (e) => {e.preventDefault()});   
 divc2.addEventListener("contextmenu", (e) => {e.preventDefault()});   
-window.onload = async function(){         
-  CheckHWStatus('MCC');
+window.onload = async function(){   
+  //CheckHWStatus('MCC');      
   Sceret=1;  //bypass login
   ////////////////
   updatacell();  

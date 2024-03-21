@@ -201,21 +201,29 @@ var xhtp = new XMLHttpRequest();
     let txre=this.responseText[0]+this.responseText[1]+this.responseText[2]+this.responseText[3];                                       
     timedata=this.responseText;
       if(txre==="mQsD")   //mQsU is Download     
-        {if(timedata[5]==='*')
-          document.getElementById('utc').value=timedata[4]; 
+        {if(timedata[4]==='#' && timedata[5]==='#')
+          {getdaydatetime(1); 
+          localStorage.removeItem('plcdata'); 
+          console.log('localStorage.removeItem1');        
+          Uploadclock();
+          }
         else
-          document.getElementById('utc').value=-timedata[5];   
-        for(let y=4;y<timedata.length;y++)
-          {if(timedata[y]==='*')
-            {document.getElementById('clkid'+tc).value=timedata[y+1];
-            document.getElementById('setbt'+tc).value=timedata[y+2]+timedata[y+3]+':'+timedata[y+4]+timedata[y+5]+':'+timedata[y+6]+timedata[y+7];
-            document.getElementById('setet'+tc).value=timedata[y+8]+timedata[y+9]+':'+timedata[y+10]+timedata[y+11]+':'+timedata[y+12]+timedata[y+13];       
-            document.getElementById('setbd'+tc).value='20'+timedata[y+14]+timedata[y+15]+'-'+timedata[y+16]+timedata[y+17]+'-'+timedata[y+18]+timedata[y+19];
-            document.getElementById('seted'+tc).value='20'+timedata[y+20]+timedata[y+21]+'-'+timedata[y+22]+timedata[y+23]+'-'+timedata[y+24]+timedata[y+25];
-            //document.getElementById('cycle'+tc).value=timedata[y+26];      
-            tc++;       
-            }
-          }  
+          {if(timedata[5]==='*')
+            document.getElementById('utc').value=timedata[4]; 
+          else
+            document.getElementById('utc').value=-timedata[5];   
+          for(let y=4;y<timedata.length;y++)
+            {if(timedata[y]==='*')
+              {document.getElementById('clkid'+tc).value=timedata[y+1];
+              document.getElementById('setbt'+tc).value=timedata[y+2]+timedata[y+3]+':'+timedata[y+4]+timedata[y+5]+':'+timedata[y+6]+timedata[y+7];
+              document.getElementById('setet'+tc).value=timedata[y+8]+timedata[y+9]+':'+timedata[y+10]+timedata[y+11]+':'+timedata[y+12]+timedata[y+13];       
+              document.getElementById('setbd'+tc).value='20'+timedata[y+14]+timedata[y+15]+'-'+timedata[y+16]+timedata[y+17]+'-'+timedata[y+18]+timedata[y+19];
+              document.getElementById('seted'+tc).value='20'+timedata[y+20]+timedata[y+21]+'-'+timedata[y+22]+timedata[y+23]+'-'+timedata[y+24]+timedata[y+25];
+              //document.getElementById('cycle'+tc).value=timedata[y+26];      
+              tc++;       
+              }
+            }  
+          }
         }
       if(txre==="mQsU")   //mQsU is Download       
         window.alert("Upload successful");

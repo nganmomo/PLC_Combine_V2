@@ -231,6 +231,7 @@ function handleInitKey(responseText){
     else    
       keyv=keyv+responseText[j];      
     }  
+  t=10;  
   for(j=4;j<350;j++)   
     {if(responseText[j]==='@') // && responseText[j+2]=='%')             
       {if(k<=mxsetdev && t<=(mysetdev*10))                                 
@@ -293,8 +294,7 @@ xhr.onreadystatechange = function() {
 var pw=0;
 //////////////////////////////////////////
 window.onload = async function(){ 
-  URL=window.location.host;
-  //URL="192.168.1.84:8088";
+  URL="192.168.1.90:8088";
   updatekeytext();  
   document.getElementById("disp").value="Pls Verify ID";    
   islock=1;

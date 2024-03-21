@@ -133,6 +133,7 @@ for(h=1;h<=MaxOut;h++)
     #else
         digitalWrite(Pinout[h],(~outstatus[h])&1);             
     #endif
+    #ifdef MaxIn
     if(rw && h<MaxIn)    
       {
       #ifdef invin    
@@ -141,6 +142,7 @@ for(h=1;h<=MaxOut;h++)
         inreadstate[h]=(~digitalRead(Pinin[h]))&1;               
       #endif                
       }
+    #endif  
   }
 }
 
@@ -202,13 +204,15 @@ for(x=0;x<xcount;x++)
   {for(y=0;y<Lasty;y++)  
     {type=dataz0[x][y];         
     if(type>0)
-      {pin=dataz1[x][y];            
+      {pin=dataz1[x][y];                  
         if(type==25 && (realtimeloop&0x3f)==0x3f)         //1/16 analog in
+          #ifdef MaxAin
           {if(analogpin[pin]!=0)
             {analogvalue=analogRead(analogpin[pin]);                            
             anastate[netnum[x+1][y]]=analogvalue>>4;                                                   
             }
           }        
+          #endif
         if(type==26)         //1/16 analog in
           {if(dataz2[x][y]>255) dataz2[x][y]=255;                            
           anastate[netnum[x+1][y]]=dataz2[x][y];                                                   

@@ -111,6 +111,12 @@ var xhtp = new XMLHttpRequest();
       txre=this.responseText[0]+this.responseText[1]+this.responseText[2]+this.responseText[3];                                       
       tyre=this.responseText;
       if(txre==="mQsD")   //mQsU is Download     
+      {if(tyre[4]==='#' && tyre[5]==='#')
+        {Localdefault(1);      
+        localStorage.removeItem('plcdata'); 
+        console.log('localStorage.removeItem3');        
+        }
+      else  
         {console.log('mqs upload ok',this.responseText);
         let x=0;let y=0;let z=0;
         for(var t=4;t<500;t++)
@@ -126,6 +132,7 @@ var xhtp = new XMLHttpRequest();
           }   
         Loaddetable();          
         }
+      }  
     }    
     t=systcell[3][1]-0x30;
     if(!(t>=2 && t<=5)) t=2;
@@ -207,12 +214,13 @@ function Loaddefault(type)
   systcell[2][6]='0'; //Enable phone Mqtt     
   }  
 else if(type===3)
-  {systcell[0][0]='XXX eu.hivemq.cloud';                       //ste=localStorage.getItem('myurl'); 
+  {//systcell[0][0]='XXX eu.hivemq.cloud';                       //ste=localStorage.getItem('myurl'); 
+  systcell[0][0]='f27d2ae246004779b11b64b42778b4a1.s2.eu.hivemq.cloud'; 
   systcell[1][0]='8883'
-  systcell[2][0]='input_id'; 
-  systcell[3][0]='input_pw';  
+  systcell[2][0]='nganmomo'; 
+  systcell[3][0]='5585Ngan';  
   systcell[0][6]='1';   
-  systcell[1][6]='1'; //Enable PLC Mqtt
+  systcell[1][6]='0'; //Enable PLC Mqtt
   systcell[2][6]='1'; 
   }
 else

@@ -1,6 +1,12 @@
 #include "../include/plcsvg.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
+#ifdef fixedurl
+IPAddress staticIP(192, 168, 1, 50);
+IPAddress gateway(192, 168, 1, 1);   // Replace this with your gateway IP Addess
+IPAddress subnet(255, 255, 0, 0);  // Replace this with your Subnet Mask
+IPAddress dns(192, 168, 1, 1);  
+#endif
 char mqtt_port_char[6];
 char ISMASTER[5]; 
 char MYTOPIC[5][64];  // = "mytopic2";
@@ -60,9 +66,10 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 //const char* ssid = "ATT3jl8Tns";
 //const char* password ="6mrk8iyf26vn";
 //---- MQTT Broker settings
-char* mqtt_server;// = "f27d2ae246004779b11b64b42778b4a1.s2.eu.hivemq.cloud";
-char* mqtt_username;// = "nganmomo";
-char* mqtt_password;// = "5585Ngan";
+//char* mqtt_server = "f27d2ae246004779b11b64b42778b4a1.s2.eu.hivemq.cloud";
+char* mqtt_server; //="f27d2ae246004779b11b64b42778b4a1.s2.eu.hivemq.cloud:8884/mqtt";
+char* mqtt_username; //= "nganmomo";
+char* mqtt_password; //= "5585Ngan";
 //const int mqtt_port;// =8883;
 int mqtt_port;
 void callback(char* topic, byte* payload, unsigned int length);
@@ -171,6 +178,11 @@ if((WiFi.status() != WL_CONNECTED))
 //#ifdef  BYPASSSETUP 
 //  WiFi.begin("ATT3jl8Tns","6mrk8iyf26vn");
 //#else
+#ifdef  fixedurl
+  if (WiFi.config(staticIP, gateway, subnet, dns, dns) == false) {
+   Serial.println("Configuration failed.");
+  }
+#endif  
   WiFi.begin(&mssid[0],&mpass[0]);
 //#endif 
   }

@@ -232,6 +232,10 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
       <polygon points='"+(x*cellw+145)+","+(y*cellh+35)+" "+(x*cellw+endcell)+","+(y*cellh+35)+"'style='stroke:"+outcolor+";stroke-width:2;'/>"
 
       var GROUP="<text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Group:</text>";
+      var CH="<text x='"+(x*cellw+3)+"' y='"+(y*cellh+12)+"' fill='white'>CH:</text>";    
+      var COL="<text x='"+(x*cellw+3)+"' y='"+(y*cellh+12)+"' fill='white'>COL:</text>";    
+      var ID="<text x='"+(x*cellw+3)+"' y='"+(y*cellh+12)+"' fill='white'>ID:</text>";
+      var STAT="<text x='"+(x*cellw+90)+"' y='"+(y*cellh+68)+"' fill='yellow'>STAT:</text>";
       
       switch(type)                      
         {case 1:     //VERTICAL HALF UPPER
@@ -284,7 +288,8 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           "<polygon points='"+(x*cellw+142)+","+(y*cellh+35)+" "+(x*cellw+endcell)+","+(y*cellh+35)+"'style='stroke:"+outcolor+";stroke-width:2;'/>\
           <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Link:</text>\
           <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+48)+"' fill='yellow'>Mode:</text>\
-          <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>LINK</text>"
+          <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>LINK</text>"+CH;
+
           break;                 
         case  24:     //ADC
           retval=leftarrow+
@@ -295,7 +300,7 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
         case  25:     //AIN
           retval=rightarrow+
           "<polygon points='"+(x*cellw+142)+","+(y*cellh+35)+" "+(x*cellw+endcell)+","+(y*cellh+35)+"'style='stroke:"+outcolor+";stroke-width:2;'/>\
-          <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>AIN</text>"+GROUP;
+          <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>AIN</text>"+GROUP+CH;
           break;   
         case  26:     //AIN CONSTANT
           retval=rightarrow+
@@ -305,28 +310,28 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>AIN</text>"
           break;            
         case  27:   //normal open remote 
-          retval=normalopen+arrowup+remote+GROUP;
+          retval=normalopen+arrowup+remote+CH+GROUP;
           break;  
         case  28:   //normal open rising 
-          retval=normalopen+arrowup+GROUP;
+          retval=normalopen+arrowup+CH+GROUP;
           break;
         case  29:   //normal open falling  
-          retval=normalopen+arrowdown+GROUP;
+          retval=normalopen+arrowdown+CH+GROUP;
           break; 
         case  30:   //NORMAL open
-          retval=normalopen+GROUP;    
+          retval=normalopen+CH+GROUP;    
           break;
         case  33:    //normal CLOSE rising         
-          retval=normalclose+arrowup+remote+GROUP;
+          retval=normalclose+arrowup+CH+remote+GROUP;
           break;  
         case  34:    //normal CLOSE rising         
-          retval=normalclose+arrowup+GROUP;
+          retval=normalclose+arrowup+CH+GROUP;
           break;
         case  35:   //normal CLOSE falling  
-          retval=normalclose+arrowdown+GROUP;
+          retval=normalclose+arrowdown+CH+GROUP;
           break;    
         case  36:   //normal close
-          retval=normalclose+arrowdown+GROUP;
+          retval=normalclose+CH+GROUP;
          break;  
         case  37:     //TIMER            
           retval=rectangleline+rectangleinout+"<text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+40)+"' fill='yellow'>Timer</text>\
@@ -372,7 +377,7 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           <polygon points='"+(x*cellw+135)+","+(y*cellh+55)+" "+(x*cellw+145)+","+(y*cellh+35)+"'style='stroke:yellow;stroke-width:2;'/>\
           <polygon points='"+(x*cellw+soffset)+","+(y*cellh+35)+" "+(x*cellw+88)+","+(y*cellh+35)+"'style='stroke:"+incolor+";stroke-width:2;'/>\
           <polygon points='"+(x*cellw+145)+","+(y*cellh+35)+" "+(x*cellw+endcell)+","+(y*cellh+35)+"'style='stroke:"+outcolor+";stroke-width:2;'/>\
-          <text font-size=11 x='"+(x*cellw+105)+"' y='"+(y*cellh+40)+"' fill='yellow'>OUT</text>"+GROUP;
+          <text font-size=11 x='"+(x*cellw+105)+"' y='"+(y*cellh+40)+"' fill='yellow'>OUT</text>"+GROUP+CH;
           break;  
         case  44:     //MQTT IN
           retval=rectangle+"<polygon points='"+(x*cellw+soffset)+","+(y*cellh+35)+" "+(x*cellw+88)+","+(y*cellh+35)+"'style='stroke:"+incolor+";stroke-width:2;'/>\
@@ -423,13 +428,13 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           retval=phonein+                    
           "<text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+48)+"' fill='yellow'>TYPE:</text>\
           <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+73)+"' fill='yellow'>PHONE IN:</text>\
-          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>ROW:</text>"
+          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>ROW:</text>"+COL;
           break;  
         case  51:    //API PHONE IN
           retval=phonein+                   
           "<text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+48)+"' fill='yellow'>Code:</text>\
           <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+73)+"' fill='yellow'>API PH IN</text>\
-          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Row:</text>"         
+          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Row:</text>"+COL;         
           break;          
         case  55:    //PHONE OUT
           retval=phoneout+                   
@@ -441,7 +446,7 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           retval=phoneout+                  
           "<text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+48)+"' fill='yellow'>Code:</text>\
           <text font-size=11 x='"+(x*cellw+95)+"' y='"+(y*cellh+73)+"' fill='yellow'>API PH OUT</text>\
-          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Mode:</text>"
+          <text font-size=11 x='"+(x*cellw+3)+"' y='"+(y*cellh+30)+"' fill='yellow'>Mode:</text>"+COL;
           break;    
         case  60:    //Repeat Time  
           retval=rectangle+"<polygon points='"+(x*cellw+142)+","+(y*cellh+35)+" "+(x*cellw+endcell)+","+(y*cellh+35)+"'style='stroke:"+outcolor+";stroke-width:2;'/>\
@@ -504,12 +509,6 @@ function filldata(type,x,y,inputcolor='yellow',outputcolor='yellow',ctltext='RET
           retval="";
           break;  
       }            
-      //if((type>=24 && type<=38) || type==40 || type==43 || type==44 || type==45 ||type==48 || type==50 || type==55)                     
-      //  retval=retval+"<text x='"+(x*cellw+90)+"' y='"+(y*cellh+68)+"' fill='yellow'>STAT:</text>";
-      if(type===50 || type===55)
-        retval=retval+"<text x='"+(x*cellw+3)+"' y='"+(y*cellh+12)+"' fill='white'>COL:</text>"          
-      else if(type>=23 && type<=70)   
-        retval=retval+"<text x='"+(x*cellw+3)+"' y='"+(y*cellh+12)+"' fill='white'>ID:</text>"          
     return  retval;
     //set DA AD value by uart or mqtt//   
   }  

@@ -25,11 +25,11 @@ for(var t=7;t<55;t++)
   ktext=document.getElementById('rmtt'+t).value;  
   txdata=txdata+ktext+"@";
   }
-let txdata1="*^^"+document.getElementById('mqtopic').value+'@';
+//let txdata1="*^^"+document.getElementById('mqtopic').value+'@';
 let txdata2="*$^"+mxsetdev+mysetdev+'@';    
-let txdata3="*^*"+document.getElementById('phpw').value+'@';  
+//let txdata3="*^*"+document.getElementById('phpw').value+'@';  
 //let txdata4="*$*"+document.getElementById('editpw').value+'@';  
-txdata=txdata+txdata1+txdata2+txdata3;//+txdata4;
+txdata=txdata+txdata2;//txdata1+txdata3+txdata4;
 length= txdata.length; 
 if(length<350)
   {xhtp.open("GET","http://"+URL+"/action?go=" + txdata, true);   
@@ -83,8 +83,8 @@ xhr.onreadystatechange = function() {
                 if(this.responseText[j+t]==='@')
                   break;
                 }
-            document.getElementById('mqtopic').value=phpval;  
-            localStorage.setItem('stmqtopic',phpval);                       
+            //document.getElementById('mqtopic').value=phpval;  
+            //localStorage.setItem('stmqtopic',phpval);                       
             }       
           if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='^')  
             {mxsetdev=this.responseText[j+3];
@@ -153,7 +153,7 @@ const words = ['A', 'B', 'C', 'D', 'E'];
 for(var t=1;t<=8;t++)
   {for(var j=1;j<=6;j++)
     {if(j<6)
-        document.getElementById('rmtt'+(j+t*6)).value=t+words[j-1];                   
+        document.getElementById('rmtt'+(j+t*6)).value=words[j-1]+t;                   
       else  
         document.getElementById('rmtt'+(j+t*6)).value=100;              
     }
@@ -164,7 +164,8 @@ mxsetdev=2;
 updaterowscols(1);
 document.getElementById('phpw').value="1a2b3c4d"; 
 //document.getElementById('editpw').value="a1b2c3d4"; 
-document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";                       
+document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";    
+Uploadremotekey();                   
 }
 
 function loaddefaultB()
@@ -289,8 +290,12 @@ var mobilekey=
 <button type='button' class='mkey' onclick='loadkeytable1()' style='margin-left:50px'>Refresh or cancel input</button>\
 <button type='button' class='mkey' onclick='loaddefaultA()' style='margin-left:50px'>Load default A</button>\
 <button type='button' class='mkey' onclick='loaddefaultB()' style='margin-left:50px'>Load default B</button>\
-<h4>Setup password for phone control, any 8 character</h4>\
-<input class='rmtt' id='phpw' maxlength='8' type='text' value='1A3B5C7D' style='width:150px;height:22px;margin-left:120px'></td>\
+<button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
+<h4>FOR LAN PHONE, NO PASSWORD REQUIRED</h4>\
+<h4>FOR MQTT PHONE, USE TOPIC 32 character AS PASSWORD</h4>\
+<h3>Step 3 GO to MQTT setup to get the PCODE and continue</h3>"
+/*
+input class='rmtt' id='phpw' maxlength='8' type='text' value='1A3B5C7D' style='width:150px;height:22px;margin-left:120px'></td>\
 <button type='button' id='grc' onclick='GererateRC(1)' style='margin-left:10px'>***Gererate random code</button>\
 <button type='button' id='grc' onclick='GererateRC(2)' style='margin-left:10px'>***Gererate random code</button>\
 <h4>Setup random topic for mqtt, any 32 character</h4><button onclick='copyToClipboard()' style='margin-left:150px'>Copy to Clipboard</button><br><br>\
@@ -298,10 +303,10 @@ var mobilekey=
 <button type='button' id='grc' onclick='GererateRC(3)' style='margin-left:10px'>***Gererate random code</button>\
 <button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
 <h3>Step 3: Assign the function of each key in the EDITPAGE</h3>\
-<h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"
+<h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"*/
 
 window.onload = async function(){         
-  //URL="192.168.1.90:8088";
+  //URL="192.168.1.95:8088";
   URL=window.location.host;  
   console.log(URL);
   console.log('11ter',mcell);  

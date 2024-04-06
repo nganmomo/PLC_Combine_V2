@@ -387,6 +387,7 @@ str[1]='\0';
 strcat(str,PCODE);
 //Serial.print("str1=");
 //Serial.println(str);
+variable[0]='@';variable[1]='@';variable[2]='$';variable[3]='$';variable[4]='\0';      
 if(isinit==DPLAY)   //Display
   {variable[0]='d';variable[1]='i';variable[2]='s';variable[3]='d';        
   byte Len=displaymess.length();
@@ -396,17 +397,17 @@ if(isinit==JDONE)   //handle keyin
   {variable[0]='j';variable[1]='o';variable[2]='b';variable[3]='d';}        
 if(isinit==KEYINIT)   //keyboard setup 
   {eerbyte(keychar,&variable[8],350);          
-  variable[0]='i';variable[1]='n';variable[2]='i';variable[3]='R';   
+  variable[0]='i';variable[1]='n';variable[2]='i';variable[3]='R';variable[4]='-';variable[5]='-';variable[6]='-';variable[7]='-';   
   }   
 //Serial.print("str=");
 //Serial.println(str);   
 //Serial.print("publishlast=");
 //Serial.println(variable);
 if(wssenable)  
-  client_s.publish(str,variable,true);  
+  client_s.publish(str,variable,false);  
 else
   {//Serial.println("not wss");   
-  client.publish(str,variable,true);  
+  client.publish(str,variable,false);  
   }
 }
 

@@ -92,7 +92,7 @@ if(work==VERIFY)
   {Serial.print("variable[6]=");
   Serial.println(&variable[6]);
   Serial.print("Storephonepw=");
-  Serial.println(Storephonepw);  
+  Serial.println(Storephonepw);    
   for(y=0;y<10;y++)
     {if(variable[y+6]!=Storephonepw[y])
       break;
@@ -141,7 +141,7 @@ if(work==DPLAY)
     displaymess=displaymess+kmodeC+'/'+knum+')';  
     }
   else
-    displaymess="Verify ID";  //when using 2nd pw                               
+    displaymess="Verify_ID";  //when using 2nd pw                               
   }         
 return 0;
 }   
@@ -243,8 +243,8 @@ void systemsetup()
     variable[3]='U';        
     }
   if(variable[3]=='D')  
-    {numchartowrite=500;
-    eerbyte(MQSTdata,variable,500);
+    {numchartowrite=500; 
+    eerbyte(MQSTdata,variable,500); //add unitcode
     variable[3]='D';
     }   
   //for time clock
@@ -478,15 +478,19 @@ else
 } 
 
 
-void encrypt(char* text,uint64_t chipId)
-{byte lookup[32]={'1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6','e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p'};
+void encrypt(char* text,uint64_t chipId,byte type)
+{byte lookup0[32]={'1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6','e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p'};
+byte lookup1[32]={'e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p','1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6'};
 byte shiftup[32]={5,1,2,3,6,7,8,0,9,5,4,1,2,3,8,7,6,0,9,4,5,1,2,7,6,1,8,0,9,4};
 uint64_t X=((chipId*773/612)*293);
 for(byte i=0;i<12;i++)
   { 
   text[i]=X & 0x1f; 
   X=X>>2;
-  text[i]=lookup[text[i]];
+  if(type==1)
+    text[i]=lookup1[text[i]];
+  else
+    text[i]=lookup0[text[i]];
   } 
 }
 

@@ -172,7 +172,7 @@ updatetable(FILLALL);
 
 //const functions = [changeframe(1), changeframe(2), changeframe(3), changeframe(4), showedit(1)];
 
-// Function to call the functions step by step at 5-second interval
+// Function to call the functions step by step at 1-second interval
 function callFunctionsStepByStep() {
     let index = 0;
     const intervalId = setInterval(() => {
@@ -187,7 +187,7 @@ function callFunctionsStepByStep() {
         } else {
             clearInterval(intervalId);
         }
-    }, 1000); // 5 seconds interval 
+    }, 1000); // 1 seconds interval 
 }
 
 function checksetup()  //txdata= "MQSD"

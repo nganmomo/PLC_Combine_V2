@@ -505,26 +505,31 @@ function clearfile()
 var checkoveronce = Array.from(Array(70), () => new Array(9).fill(0)); 
 //for auto ID
 function cannotmorethanonce(type,deviceID,xx,yy) {
-if(type===23 || type===24 || (type>=37 && type<=42) || type>=44 || type>=50 || type>=55)  //assign once control
-  {//get assign status
-  for(let t=1;t<9;t++)  
-    checkoveronce[type][t]=0;
-  for(let gx=0;gx<xcount;gx++)
-    for(let gy=0;gy<ycount;gy++)
-    {scantype=serialcelldata[gy*48+gx*8];  
-    if(scantype==type && serialcelldata[gy*48+gx*8+1]>0)    //type equal 
-      {checkoveronce[type][serialcelldata[gy*48+gx*8+1]>>8]=1;        //set as 1
-      if(gx===xx && gy===yy)
-        return 0;     //already in use with same location
+if(type===50)  
+  return 0;  
+else    
+  {if(type===23 || type===24 || (type>=37 && type<=42) || type>=44 || type>=55)  //assign once control
+    {//get assign status
+    for(let t=1;t<9;t++)  
+      checkoveronce[type][t]=0;
+    for(let gx=0;gx<xcount;gx++)
+      for(let gy=0;gy<ycount;gy++)
+      {scantype=serialcelldata[gy*48+gx*8];  
+      if(scantype==type && serialcelldata[gy*48+gx*8+1]>0)    //type equal 
+        {checkoveronce[type][serialcelldata[gy*48+gx*8+1]>>8]=1;        //set as 1
+        if(gx===xx && gy===yy)
+          return 0;     //already in use with same location
+        }  
       }  
-    }  
-  if(checkoveronce[type][deviceID]===0)  
-    {checkoveronce[type][deviceID]=1;  
-    return 0;
+    if(checkoveronce[type][deviceID]===0)  
+      {checkoveronce[type][deviceID]=1;  
+      return 0;
+      }
+    else  //id already used
+      return 1;
     }
-  else  //id already used
-    return 1;
   }
+return 0;  
 }  
     
 

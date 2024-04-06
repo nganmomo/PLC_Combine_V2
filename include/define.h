@@ -6,84 +6,20 @@
 //#define CreateUnicode
 #define CheckUnicode    //software lock security
 //*******************************//
-#define ver2    
-//#define B32            //option 1-5 or B32
+#define ver2            //define version or esp32S3
 //#define fixedurl      //fixed url for [ESP32S3] only
 
-#define chphpw      //bypass check phone password
+//#define chphpw      //uncomment to enable check phone password
 //#define uart1       //software uart   
 
 //#define invout      1         //invert input
 //#define invin       1         //invert output
-
-#define writeonly   0           //rwswitchs
-#define readwrite   1           //rwswitchs
-
-#define DPLAY       1           //phone
-#define VERIFY      2
-#define DWORK       3
-#define AWORK       4
-#define KEYINIT     5
-#define JDONE       6
-
-#define ON          1
-#define OFF         0
-#define CLOSE       3           //for STATUS
-#define OPEN        2
-
-#define xcount      6           //edit table
-#define ycount      40
-
-#define eessid      0           //50
-#define adddataz0   50          //240       8 bit            
-#define adddataz1   290         //240       8 bit shif 8
-#define adddataz2   530         //240       8 bit shit 8
-#define adddataz3   770         //240       8 bit 
-#define adddataz4   1010        //480       16 bit
-#define MQSTdata    1490        //500
-#define phpw        2000        //20
-#define editpw      2020        //20    
-#define MQtopic     2040        //40  
-#define phonesize   2080        //4 
-#define keychar     2084        //400
-#define unicode     2484        //16
-#define timeclock   2450        //500
-#define mqttpass    2950        //
-#define EEPROM_SIZE 3072        //
-
 //https://www.espressif.com/sites/default/files/documentation/esp32-s3_hardware_design_guidelines_en.pdf
 //GPIO 26-32 SPI flash
 //PSRAM 33-37
 //ESP32-S3R8 ESP32-S3R8V GPIO 33-37
 //Should not use 0 3 45 46
 //38 led rgb
-#ifdef B32              
-#define MaxOut  4
-//#define MaxIn   4
-//#define MaxAin  4
-#define setuppin 34
-#define Pout1   32
-#define Pout2   33
-#define Pout3   25
-#define Pout4   26
-#define Pout5   32
-#define Pout6   33
-#define Pout7   25
-#define Pout8   26
-#define Pin1    13
-#define Pin2    14
-#define Pin3    13
-#define Pin4    14
-#define Pin5    13
-#define Pin6    14
-#define Pin7    13
-#define Pin8    14
-#define Ain1    12
-#define Ain2    12
-#define Ain3    12
-#define Ain4    12
-#define pw_enable_sw    27
-#endif
 
 #ifdef ver1     //T board
 #define SERIAL1_TX_PIN 47 
@@ -122,6 +58,7 @@
 #define SERIAL1_TX_PIN 47 
 #define SERIAL1_RX_PIN 45 
 
+#define MaxIn8
 #define MaxIn  8
 #define Pin1 7
 #define Pin2 15    //DEBUG PIN  
@@ -132,6 +69,7 @@
 #define Pin7 46   
 #define Pin8 13     
 
+#define MaxOut8
 #define MaxOut  8
 #define Pout1 42
 #define Pout2 41
@@ -142,6 +80,8 @@
 #define Pout7 35   
 #define Pout8 45
 
+#define MaxAin4
+#define MaxAIn  4
 #define Ain1 4
 #define Ain2 5
 #define Ain3 3
@@ -309,3 +249,29 @@
 #define setuppin  19         //SETUP BUTTON
 #define pw_enable_sw 21 
 #endif
+
+#ifdef ver7
+////////G0 GND GND RXD TXD 5V/////////////          
+//3V3   CLK             5V      GND      
+//SD0   SD1             SD3     CMD
+//G15   G2              G13     SD2    
+//G0    G4              G14     G12
+//G16   G17         G26/RY4     G27
+//G5    G18         G33/RY2     RY3/G25
+//G19   GND             G35     RY1/G32
+//G21   RXD         G36/SVN     G34
+//TXD   G22             EN      SVP
+//G23   GND             GND     3V3
+///////////////////////////////////////////       
+#define MaxOut4   
+#define Pout1       32
+#define Pout2       33
+#define Pout3       25
+#define Pout4       26
+#define invout                //invert input
+#define pw_enable_sw    19    //password  
+#define setuppin        23    //setup      
+#endif
+
+
+

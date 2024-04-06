@@ -158,14 +158,60 @@ extern void anykey(byte a);
 extern char encrytext[12];
 extern char comparetext[12];
 extern uint64_t chipId;
-extern void encrypt(char* encrytext,uint64_t chipId);
-extern void brokersetup(int port);
-extern void brokerloop();
+extern void encrypt(char* encrytext,uint64_t chipId,byte type);
+//extern void brokersetup(int port);
+//extern void brokerloop();
 /*
 void anykey(int test,int point1,int point2);
 Serial.println("anykey");  
 while (!Serial.available());
 Serial.read();
 */
-//void brokersetup(int port);
-//void brokerloop();
+#define writeonly   0           //rwswitchs
+#define readwrite   1           //rwswitchs
+
+#define DPLAY       1           //phone
+#define VERIFY      2
+#define DWORK       3
+#define AWORK       4
+#define KEYINIT     5
+#define JDONE       6
+
+#define ON          1
+#define OFF         0
+#define CLOSE       3           //for STATUS
+#define OPEN        2
+
+#define xcount      6           //edit table
+#define ycount      40
+
+#define eessid      0           //50
+#define adddataz0   50          //240       8 bit            
+#define adddataz1   290         //240       8 bit shif 8
+#define adddataz2   530         //240       8 bit shit 8
+#define adddataz3   770         //240       8 bit 
+#define adddataz4   1010        //480       16 bit
+#define MQSTdata    1490        //500
+#define unicodeQ    1984        //16
+#define phpw        2000        //20
+#define editpw      2020        //20    
+#define MQtopic     2040        //40  
+#define phonesize   2080        //4 
+#define keychar     2084        //400
+#define unicodeE    2484        //16
+#define timeclock   2450        //500
+#define mqttpass    2950        //
+#define EEPROM_SIZE 3072        //
+//esp32
+#ifdef  MaxOut8
+#define MaxOut  9
+#endif 
+#ifdef  MaxOut4
+#define MaxOut  5
+#endif 
+#ifdef  MaxIn8
+#define MaxIn  9
+#endif 
+#ifdef  MaxIn4
+#define MaxIn  5
+#endif 

@@ -55,8 +55,8 @@ var  fbstatus2=Array(60).fill('0');
 var  fbstatus3=Array(60).fill('0'); 
 var  fbstatus4=Array(60).fill('0'); 
 
-var URL ="192.168.1.95:8088";
-//var URL=window.location.host; 
+//var URL ="192.168.1.95:8088";
+var URL=window.location.host; 
 
 function updatestatus() //e.g. ON OFF *important*
 {//console.log('updatestatus');

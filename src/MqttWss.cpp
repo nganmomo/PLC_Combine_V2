@@ -252,15 +252,17 @@ else
   }
 }
 
-//======================================= publising as string
+//======================================= publising as string===No longer use==
 void publishMessage(const char* topic, String payload , boolean retained){
 if(wssenable)
-  {if (client_s.publish(topic, payload.c_str(), true))
-  Serial.println("Message publised ["+String(topic)+"]: "+payload);
+  {client_s.publish(topic, payload.c_str(), false);
+    //if (client_s.publish(topic, payload.c_str(), false))
+  //Serial.println("Message publised ["+String(topic)+"]: "+payload);
   }
 else
-  {if (client.publish(topic, payload.c_str(), true))
-  Serial.println("Message publised ["+String(topic)+"]: "+payload);
+  {client.publish(topic, payload.c_str(), false);
+  //if (client.publish(topic, payload.c_str(), false))
+  //Serial.println("Message publised ["+String(topic)+"]: "+payload);
   }  
 }
 //phone on Mqtt:--
@@ -272,10 +274,12 @@ char chars[200];
 byte rxtopic;
 for(unsigned int i = 0; i < len; i++)
   chars[i] = (char)payload[i];
-//Serial.print("callback=");
-//Serial.println(chars);   
-//Serial.print("topic=");
-//Serial.println(topic);     
+if(topic[0]==encrytext[0] && topic[1]==encrytext[1] && topic[2]==encrytext[2])
+{//Serial.print("callback=");
+//Serial.println(&topic[2]);   
+Serial.print("Payload=");
+Serial.println(chars);   
+}
 if(topic[0]=='M'|| topic[0]=='A'|| topic[0]=='B'|| topic[0]=='C')   //PLC
   {if(topic[0]=='M') rxtopic=0;if(topic[0]=='A') rxtopic=1;if(topic[0]=='B') rxtopic=2;if(topic[0]=='C') rxtopic=3;  
   byte t,j;
@@ -338,9 +342,13 @@ void onMqttConnect() {
       strcat(pstr,ECODE);    
       strcat(pstr,&MYTOPIC[t][0]);                       
       if(wssenable)
-        client_s.subscribe(pstr);
+        {client_s.subscribe(pstr);
+        client_s.subscribe(encrytext);
+        }
       else
-        client.subscribe(pstr);    
+        {client.subscribe(pstr); 
+        client.subscribe(encrytext);   
+        }
       Serial.println(pstr);
       strcpy(pstr,"");    
       }
@@ -353,7 +361,8 @@ void onMqttConnect() {
     pstr[1]='\0';
     strcat(pstr,ECODE);    
     strcat(pstr,&MYTOPIC[ISMASTER[1]-0x30+1][0]);
-    client.subscribe(pstr);     
+    client.subscribe(pstr);    
+    client.subscribe(encrytext);    
     Serial.println(pstr);
     }  
   if(EPHMQTT[0]=='1')
@@ -387,6 +396,7 @@ str[1]='\0';
 strcat(str,PCODE);
 //Serial.print("str1=");
 //Serial.println(str);
+variable[0]='@';variable[1]='@';variable[2]='$';variable[3]='$';variable[4]='\0';      
 if(isinit==DPLAY)   //Display
   {variable[0]='d';variable[1]='i';variable[2]='s';variable[3]='d';        
   byte Len=displaymess.length();
@@ -396,17 +406,17 @@ if(isinit==JDONE)   //handle keyin
   {variable[0]='j';variable[1]='o';variable[2]='b';variable[3]='d';}        
 if(isinit==KEYINIT)   //keyboard setup 
   {eerbyte(keychar,&variable[8],350);          
-  variable[0]='i';variable[1]='n';variable[2]='i';variable[3]='R';   
+  variable[0]='i';variable[1]='n';variable[2]='i';variable[3]='R';variable[4]='-';variable[5]='-';variable[6]='-';variable[7]='-';   
   }   
 //Serial.print("str=");
 //Serial.println(str);   
 //Serial.print("publishlast=");
 //Serial.println(variable);
 if(wssenable)  
-  client_s.publish(str,variable,true);  
+  client_s.publish(str,variable,false);  
 else
   {//Serial.println("not wss");   
-  client.publish(str,variable,true);  
+  client.publish(str,variable,false);  
   }
 }
 

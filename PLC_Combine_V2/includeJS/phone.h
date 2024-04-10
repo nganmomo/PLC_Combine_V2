@@ -1,14 +1,7 @@
 static const char PROGMEM INDEX_HTML_phone[] = R"rawliteral(
 <html>
-<head><link href='https://ipcworld.online/SVGPLC/images/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
-<!--phone.html for xhttp-->
-<!-- hand shakeing status
-_________________________________________________________________________________________________________________
-| From PHONE             Purpose                    Protocol                   return 
-|keyr               Request keyboard initial        esp32 xhr get             keyvalue
-|mobk11             TOGGLE SWITCH ID11              esp32 xhr get             'mobk'
-|mobt               Request Display                 esp32 xhr get             'mobtON(A/1)'
-|__________________________________________________________________________________________________________________
+<head><link href='http://ipcworld.online/SVGPLC/images/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
+<!--
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MQTT Publisher</title>
@@ -18,7 +11,7 @@ ________________________________________________________________________________
 <title>ESP32-CAM Xhttp phone</title>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <body>
-<a href="https://ipcworld.online/pwa/pwaph.html" style=color:burlywood><h2>Donkey LAN</h2></a> 
+<a href="http://ipcworld.online/pwa/pwaph.html" style=color:burlywood><h2>Donkey LAN</h2></a> 
 <label id="init">Input put password</label>
 <br>
 <tr>
@@ -173,15 +166,15 @@ if(responseText[3]==='d' || responseText[3]==='k' || responseText[3]==='t')
     '('+responseText[16]+'/'+responseText[18]+')';
     }
   else
-    {//if(islock===1)
-    //  document.getElementById('disp').value="PLS Verify ID";  //add to PWA
-    //else  
+    {if(islock===1)
+      document.getElementById('disp').value="PLS Verify ID";  //add to PWA
+    else  
       {document.getElementById('disp').value=disptext;
       if(disptext==='ID not match')
         document.getElementById('rmt96').style.backgroundColor="#111111";//2f4468";//butcolor[keyno];
       else
         {if(disptext[0]==='O' && disptext[1]==='N')
-          document.getElementById('rmt'+PreviousKey).style='border:3px solid #c51919;width:'+WW+'px;height:'+HH+'px';
+          document.getElementById('rmt'+PreviousKey).style='border:1px solid #c51919;width:'+WW+'px;height:'+HH+'px';  
         else
           document.getElementById('rmt'+PreviousKey).style='border:0px solid #c51919;width:'+WW+'px;height:'+HH+'px';
         }
@@ -206,7 +199,7 @@ function handleInitKey(responseText){
   var t=10;
   let tmpic="";
   const  tx=['140','140','100','80','60','50','53'];
-  const  ty=['130','130','120','70','45','45','45','40'];  
+  const  ty=['130','130','120','70','45','45','45','40'];
   if(responseText[3]=='R')
   {for(j=60;j<350;j++)
     {if(responseText[j]==='*' && responseText[j+1]==='^' && responseText[j+2]==='^')  
@@ -222,21 +215,22 @@ function handleInitKey(responseText){
         WW=tx[mxsetdev];
         HH=ty[mysetdev];
         keyv="";
-        loadkeytable2();             
+        loadkeytable2();
         for(let y=1;y<=mysetdev;y++)
           {for(let x=1;x<=mxsetdev;x++) 
-            {t=y*10+x;             
+            {t=y*10+x;
             document.getElementById('rmt'+t).style.width=tx[mxsetdev]+'px';     
-            document.getElementById('rmt'+t).style.height=ty[mysetdev]+'px';                                 
+            document.getElementById('rmt'+t).style.height=ty[mysetdev]+'px';                       
+            if(mysetdev<4 || mysetdev<4)  
+              document.getElementById('rmt'+t).style.margin="13px 13px"; 
             }
-          }                                
+          }   
         document.getElementById('rmt96').style.backgroundColor="#111111";                      
-        break;                      
+        break;              
       }
     else    
       keyv=keyv+responseText[j];      
     }  
-  t=10;  
   for(j=4;j<350;j++)   
     {if(responseText[j]==='@') // && responseText[j+2]=='%')             
       {if(k<=mxsetdev && t<=(mysetdev*10))                                 
@@ -299,8 +293,8 @@ xhr.onreadystatechange = function() {
 var pw=0;
 //////////////////////////////////////////
 window.onload = async function(){ 
-  URL="192.168.1.95:8088";
-  //URL=window.location.host; 
+  URL=window.location.host;
+  //URL="192.168.1.84:8088";
   updatekeytext();  
   document.getElementById("disp").value="Pls Verify ID";    
   islock=1;

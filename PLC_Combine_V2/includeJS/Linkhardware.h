@@ -1,7 +1,4 @@
 static const char PROGMEM INDEX_HTML_Linkhardware[] = R"rawliteral(
-//4/10/2024
-//var URL="192.168.1.95:8088";
-var  URL=window.location.host;
 var xhttp = new XMLHttpRequest();
 var rxcode="";
 var bufferz0 = Array(245).fill(0);   //242
@@ -202,7 +199,7 @@ function DownloadFromHW(txre) {
 if(tryonline===1)
   window.alert("This function required hardware");
 else if(Sceret===0)
-  window.alert("Please login before download or set switch to edit mode\n refresh to login page");
+  window.alert("Please login before download\n, refresh to login page");
 else  
   {timeoutmessage="Download overtime, please wait";
   //myTimeout=setTimeout(TimeoutMessage,3000);    
@@ -247,11 +244,11 @@ else
     updatetable(FILLALL);       
     timeoutmessage="Hareware will not keep comment, Please use file to keep comment\n download successful";           
     document.getElementById('labelul').style.backgroundColor="#333333";
-    }
-  //else
-  //  {
-  //  window.alert("Please set time clock and try again"); 
-  //  }            
+    }  
+  else
+    {
+    window.alert("Please set time clock and try again"); 
+    }            
   }  
 } 
 
@@ -353,9 +350,9 @@ function retrieve(datatosend,buffer) {
 function uploadesp(datatosend,Length) { 
   if(tryonline===1)
     window.alert("This function required hardware");
-  {//if(Sceret===0)
-    //  window.alert("Please login before upload\n, refresh to login page");
-    //else
+  {if(Sceret===0)
+      window.alert("Please login before upload\n, refresh to login page");
+    else
     {if(datatosend==='swur')
          {document.getElementById('labelul').style.backgroundColor="aliceblue";  
          document.getElementById('labelul').style.width="130px";
@@ -397,6 +394,7 @@ function uploadesp(datatosend,Length) {
     //console.log('txre',txre);
     if(Length>0)
       datatosend.length=Length;  
+    //URL=window.location.host; 
     xhttp.open("GET","http://"+URL+"/action?go=" + datatosend, true);   
     xhttp.send();  
     }    
@@ -414,53 +412,17 @@ if(txre==="SWU")
   }  
 }  
 
-function downloadsetup(txdata,systcell)  //txdata= "MQSD"
-{//MQSU MQSD     
-var xhtp = new XMLHttpRequest(); 
-  xhtp.onreadystatechange = function() {
-  txre="";  
-  tyre="";
-  xsetdev=4;
-  ysetdev=7;
-  tt=0;
-  if(this.readyState == 4 && this.status == 200) {      
-      txre=this.responseText[0]+this.responseText[1]+this.responseText[2]+this.responseText[3];                                       
-      tyre=this.responseText;
-      if(txre==="mQsD")   //mQsU is Download     
-        {console.log('mqs upload ok',this.responseText);
-        let x=0;let y=0;let z=0;
-        for(tt=4;tt<500;tt++)
-          {if(tyre[tt]=='%')
-            {if(x++>=(xsetdev-1))
-              {x=0;y++;
-              if(y>=ysetdev)  
-                break; //y=0;   
-              }                                 
-            systcell[x][y]="";              
-            }  
-          else                       
-            systcell[x][y]=systcell[x][y]+tyre[tt];                                                            
-          }                 
-        }
-      }
-    }        
-  console.log("txdata=",txdata);      
-  xhtp.open("GET","http://"+URL+"/action?go="+txdata, true);     
-  xhtp.send();  
-}
-
 
 ////////////////////run and update//////////////////////
 function CheckHWStatus(x) { 
   if(tryonline===1)
     window.alert("This function required hardware");
   else
-  {let vdata=x;   
+  {let vdata;  
+  let disptext;
   if(x===0)
     vdata="MCK"; 
-  if(x===1)
-    vdata="THW"; //test hardware
-  if(x===2)
+  else
     vdata="MCC"+localStorage.getItem("editpageSecret"); 
   xhttp.onreadystatechange = function() {
   //Sceret=0;
@@ -472,24 +434,20 @@ function CheckHWStatus(x) {
         PleaseLogin();  
       }
     else if(this.responseText[0]==='M' && this.responseText[1]==='C' && this.responseText[2]==='k')  
-      {if(this.responseText[3]==='Q')
-        {//document.getElementById("botstatus").innerText="MQTTOK";
+      {if(this.responseText[3]==='Q' && this.responseText[4]==='S')
+        {document.getElementById("botstatus").innerText="MQTTOK";
         //document.getElementById("botstatus").style.color ="yellow";
-        window.alert("Mqtt tested successful,\n [Optional] check feedback result in serial monitor");
         }
       else
-        {document.getElementById("botstatus").innerText ="NOMQTT";                        
+        {document.getElementById("botstatus").innerText ="NORMAL";                        
         //document.getElementById("botstatus").style.color ="yellow";      
         window.alert("Check mqtt switch and wifi");
         }
-      } 
-    else if(this.responseText[0]==='T' && this.responseText[1]==='H' && this.responseText[2]==='w')
-      if(this.responseText[3]==='1')
-        Sceret=1;  
-      else
-        Sceret=0;    
+      }        
     } 
   }  
+  //xhttp.open('GET','http://192.168.1.186/action?go=MCK', true);
+  //URL=window.location.host; 
   xhttp.open('GET','http://'+URL+'/action?go='+vdata, true);
   xhttp.send();
   }

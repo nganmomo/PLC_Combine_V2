@@ -34,9 +34,6 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", timeZone * 3600, 60000);
 //const int counterPin = 7;  // Replace with the GPIO pin you want to use as the counter input
 //volatile int counterValue = 0;
 //////////HW COUNTER///////
-//MqttBroker
-//char mqtpass[10];
-//MqttBroker
 #ifdef  uart1
 uint16_t uartmaster(int length); 
 void SerialRTXLoop(char* buffer,byte length);
@@ -62,22 +59,9 @@ byte buttonnum=0;
 byte buttonmode;
 byte Rbuttonnum=0;
 byte Rbuttonmode;
-#ifdef  MaxOut8
-#define  MaxOut  8
 byte Pinout[9]={0,Pout1,Pout2,Pout3,Pout4,Pout5,Pout6,Pout7,Pout8};
-#endif
-#ifdef  MaxOut4
-byte Pinout[9]={0,Pout1,Pout2,Pout3,Pout4,0,0,0,0};
-#endif
-#ifdef  MaxIn8
 byte Pinin[9]={0,Pin1,Pin2,Pin3,Pin4,Pin5,Pin6,Pin7,Pin8};
-#endif
-#ifdef  MaxIn4
-byte Pinin[9]={0,Pin1,Pin2,Pin3,Pin4};
-#endif
-#ifdef MaxAin4
 byte analogpin[5]={0,Ain1,Ain2,Ain3,Ain4};
-#endif
 //byte analogpout[5]={Aout0,Aout1,Aout2,Aout3,Aout4};
 
 String MYSSID = "";
@@ -235,7 +219,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     {//Serial.println("key");
     int t;
     if(variable[3]=='s')
-      {//mobile.js   http://192.168.1.84:8088/KEYS                      
+      {//mobile.js   http://192.186.1.84:8088/KEYS                      
       eewbyte(keychar,&variable[4],350);       
       for(t=60;t<350;t++)      
         {if(variable[t]=='*' && variable[t+1]=='^' && variable[t+2]=='^')
@@ -262,7 +246,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
           }
         }         
       }
-    if(variable[3]=='r' || variable[3]=='w') //password (must with switch)
+    if(variable[3]=='r' || variable[3]=='w') //read and read with password (must with switch)
       {eerbyte(keychar,&variable[4],350);     
       for(t=60;t<350;t++)     //keyboard initial
         {if(variable[t]=='*' && variable[t+1]=='$' && variable[t+2]=='^')                         
@@ -277,16 +261,14 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     ReturnSign='y';   //numchartowrite default 6   
     }      
   if(variable[0]=='m' && variable[1]=='o' && variable[2]=='b') //mobile   mobo96 verify password
-    {Serial.print("mobo");  
-    Serial.println(variable); 
-    if(variable[3]=='o')
+    {if(variable[3]=='o')
       numchartowrite=cellkeyboard(VERIFY);  //staticpromipcw.h local remote.js    
     if(variable[3]=='k')
       numchartowrite=cellkeyboard(DWORK); 
     if(variable[3]=='t')
       numchartowrite=cellkeyboard(DPLAY);      
     displaymess.toCharArray(&variable[4],displaymess.length()+1);  
-    numchartowrite=displaymess.length()+4;   //http://192.168.1.84:8088/MOB   feedback unchange   
+    numchartowrite=displaymess.length()+4;   //http://192.186.1.84:8088/MOB   feedback unchange   
     Runmode=1;   
     }
   if(variable[0]=='s' && variable[1]=='w' && variable[2]=='u') //switch simulation Tested
@@ -302,33 +284,24 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     ReturnSign='U';   
     }
   if(variable[0]=='M' && variable[1]=='Q' && variable[2]=='S') //MQTT Uploadsetup MQST Tested
-    {systemsetup();               
+    {systemsetup();         //http://192.186.1.84:8088/MQST        
     //Serial.print("variable=");
     //Serial.println(variable);
     Runmode=1;    //RUN PLC    
     }  
-  if(variable[0]=='M' && variable[1]=='C' && variable[2]=='K') //Test Mqtt status
-    {//publishMessage("XxMqtt_test_topic","Mqtt feedback is normal",false);    
-    publishMessage(encrytext,"Mqtt feedback is normal",false);    
+  if(variable[0]=='M' && variable[1]=='C' && variable[2]=='K') //MQTT Uploadsetup MQST Tested
+    {//systemsetup();         //http://192.186.1.84:8088/MQST       
     if(mqttconnected==1) variable[3]='Q';
     else  variable[3]='N';
-    if(Runmode) variable[4]='R';
-    else  variable[4]='N';    
+     if(Runmode) variable[4]='S';
+    else  variable[4]='S';
     numchartowrite=5;
     Runmode=1;    //RUN PLC    
     }    
-  if(variable[0]=='T' && variable[1]=='H' && variable[2]=='W') //Test hardare status
-    {byte hardswitch=1;
-    if(hardswitch) variable[3]='1';
-      else  variable[3]='0';
-    if(Runmode) variable[4]='R';
-      else  variable[4]='N';    
-    numchartowrite=5;
-    Runmode=1;    //RUN PLC    
-    }  
   if(variable[0]=='M' && variable[1]=='C' && variable[2]=='C') //Check password
-    {if(digitalRead(pw_enable_sw)==1)      //if pw_enable_sw==1 bypass check password
-      {variable[4]='Y';adminpermit=0;}  //admin condition
+    {//systemsetup();         //http://192.186.1.84:8088/MQST       
+    if(digitalRead(pw_enable_sw)==1)
+      {variable[4]='Y';adminpermit=0;}
     else
       {byte t;      
       eerbyte(editpw,Storeeditpw,9);
@@ -369,7 +342,7 @@ static esp_err_t cmd_handler(httpd_req_t *req){
 
 void starthttpServer(){
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-  config.max_open_sockets = 10;
+  config.max_open_sockets = 3;
   config.max_uri_handlers = 14;
   config.server_port = 8088;
   httpd_uri_t index_uri = {
@@ -466,7 +439,7 @@ void starthttpServer(){
 
   if (httpd_start(&controller_httpd, &config) == ESP_OK) {   
     httpd_register_uri_handler(controller_httpd, &index_uri12);  //step4
-    httpd_register_uri_handler(controller_httpd, &index_uri11);  
+    httpd_register_uri_handler(controller_httpd, &index_uri11);  //step4
     httpd_register_uri_handler(controller_httpd, &index_uri10);   
     httpd_register_uri_handler(controller_httpd, &index_uri9);
     httpd_register_uri_handler(controller_httpd, &index_uri8);
@@ -505,10 +478,10 @@ void downloadinit()
     //genlinktable();              
     ioinit();        //0 if not coolboot from 0 
     esp_task_wdt_init(1,true);   
-    esp_task_wdt_add(NULL);  //gen reset signal
-    delay(1500);    //create timeout reset
+    esp_task_wdt_add(NULL); 
+    delay(1500);
     //coolboot();
-    Serial.println("Cool boot");   
+    //Serial.println("Cool boot");   
     Runmode=1;   
     esp_task_wdt_init(20,true);   
     esp_task_wdt_add(NULL);            
@@ -520,91 +493,88 @@ void coolboot()
 digitalWrite(COOLBOOT,LOW);
 }
 #endif
-void setup(){   
+void setup(){      
   // Initialize the watchdog timer with a timeout of 10 seconds  
   esp_task_wdt_init(20, false);   //false to stop watch dog timer -> turn on is true
-  esp_task_wdt_add(NULL);         //reset when 20 second over
+  esp_task_wdt_add(NULL); 
   pinMode(setuppin,INPUT_PULLUP); 
-  
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector 
   Serial.begin(115200);
   Serial.setDebugOutput(false); 
   #ifdef  uart1
   Serial1.begin(115200, SERIAL_8N1, SERIAL1_TX_PIN, SERIAL1_RX_PIN);     
   #endif
-  Serial.println("///////////////Donkey PLC setup information///////////////");  
-  //MqttBroker
   if(pw_enable_sw!=0)  //On or OFf passward check//
     {pinMode(pw_enable_sw,INPUT_PULLUP);
     if(digitalRead(pw_enable_sw)==1)  
-      Serial.println("Password Setup switch is in UNLOCK position");  
+      Serial.println("PW Setup switch is in UNLOCK position");  
     else
-      Serial.println("Password Setup switch is in LOCK position");    
+      Serial.println("PW Setup switch is in LOCK position");    
     }  
-  //modify in sMQTTBroker.cpp 
   ///////////////////////////////  
-  Serial.println("Designed by DonKey Lab.");  
+  Serial.println("PLC Maxtron");  
   eerpassid(eessid,mssid,mpass);
-  if(mssid[0]>=0x30 && mssid[0]<0x7e)
-  {Serial.println(mssid);
-  Serial.println(mpass); 
-  }   
-
-  Serial.print("setuppin=");  
-  Serial.println(digitalRead(setuppin));  
-
+  Serial.println(mssid);
+  Serial.println(mpass);    
   if(digitalRead(setuppin)==SETUPSTATE)  //setup mode
-    { //setup wifi id and password
-      byte key,count=0; 
-      setupmode=1;   
-      eerbyte(0,&STXbuffer[1],50);
-      loaddefaultvalue();
-      #ifdef  uart1
-      SerialRTXLoop(STXbuffer,50);    
-      if(uartmaster(50)>40000)
-        key=0;  
-      #endif  
+    {byte key; 
+    setupmode=1;   
+    eerbyte(0,&STXbuffer[1],50);
+    #ifdef  uart1
+    SerialRTXLoop(STXbuffer,50);    
+    if(uartmaster(50)>40000)
+      key=0;  
+    #endif  
       Serial.print("Input ssid=");  
       do{if (Serial.available() > 0) {
-        key = Serial.read();               
+        key = Serial.read();
         MYSSID=MYSSID+static_cast<char>(key);
-        count++;
         }
-        }while(key!=0xd && key!=0xa);        
+        }while(key!=0xd && key!=0xa);
       Serial.println(MYSSID);  
       key=0;
       Serial.print("Input password=");
       do{if (Serial.available() > 0) {
         key = Serial.read();
         MYPASSWORD=MYPASSWORD+static_cast<char>(key);
-        count++;
         }
-        }while(key!=0xd && key!=0xa);       
-      eerbyte(eessid,&STXbuffer[1],50);  //data to link Broker board 
-      #ifdef  uart1
-      SerialRTXLoop(STXbuffer,50);
-      if(uartmaster(50)>40000)
-        Serial.println("Uart connect failure");
-      #endif     
-      Serial.println(MYPASSWORD);  
-      Serial.println("To run program set switch to run position and press reset to start program");
-      Serial.println("To change SSID or password set switch setup position and press reset");
-      if(count>10)
-      {MYSSID.toCharArray(mssid,MYSSID.length());
-      MYPASSWORD.toCharArray(mpass,MYPASSWORD.length());     
-      eewpassid(eessid,mssid,mpass);
-      }  
-      while (digitalRead(setuppin)==SETUPSTATE);      //wait for key release
-    } //setup wifi id and password
-  else    //read wifi id password in eeprom 
-    eerpassid(eessid,mssid,mpass);                     
-  getdata(1,6,EPLCMQTT);
-  getdata(2,6,EPHMQTT);     
-  //connect to mqtt if setup found
-  if(EPHMQTT[0]=='1'|| EPLCMQTT[0]=='1')
-    clientsetup(1);     //connect to wifi and Mqtt
-  else                
-    clientsetup(0);     //connect to wifi only  
+        }while(key!=0xd && key!=0xa);           
+    eerbyte(eessid,&STXbuffer[1],50);  //data to link Broker board 
+    #ifdef  uart1
+    SerialRTXLoop(STXbuffer,50);
+    if(uartmaster(50)>40000)
+      Serial.println("Uart connect failure");
+    #endif     
+    Serial.println(MYPASSWORD);  
+    Serial.println("To run program set switch to run position and press reset to start program");
+    Serial.println("To change SSID or password set switch setup position and press reset");
+    MYSSID.toCharArray(mssid,MYSSID.length());
+    MYPASSWORD.toCharArray(mpass,MYPASSWORD.length()); 
+    eewpassid(eessid,mssid,mpass);
+    //while (!Serial.available());
+    while (digitalRead(setuppin)==SETUPSTATE);
+    }
+  else
+    {
+    #ifdef  BYPASSSETUP
+      const char* ssid = "ATT3jl8Tns";
+      const char* password = "6mrk8iyf26vn";
+      WiFi.begin(ssid,password);
+    #else
+      //WiFi.begin(ssid,password);
+      //#else
+      //no setup auto start will store ssid and pws// 
+      eerpassid(eessid,mssid,mpass);         
+    #endif
+    }   
+  #ifdef    MQTTACTIVE       
+    getdata(1,6,EPLCMQTT);
+    getdata(2,6,EPHMQTT); 
+    if(EPHMQTT[0]=='1'|| EPLCMQTT[0]=='1')
+      clientsetup(1);
+    else                
+      clientsetup(0);//
+  #endif     
   while(wificonnected==0) 
   {Serial.print('.');
   if(connectcount++>512)
@@ -612,43 +582,34 @@ void setup(){
       Serial.println("Unable to connect network, reenter check password and id"); //add check mqtt and bypass if necessory    
       }
   delay(20);
-  } 
+  }
   if(mqttconnected)
     Serial.println("Mqtt connected");         
   else
     Serial.println("Waiting for Mqtt connect");      
-  //////////    
-    uint64_t chipId;
-    chipId = ESP.getEfuseMac();
-    encrypt(encrytext,chipId,1);    
-    eewbyte(unicodeQ,encrytext,12);      
-  //////////       
-    #ifdef CreateUnicode    
-    chipId = ESP.getEfuseMac();
-    encrypt(encrytext,chipId,0);    
-    eewbyte(unicodeE,encrytext,12);      
+  #ifdef CreateUnicode
+    uint64_t chipId = ESP.getEfuseMac();
+    encrypt(encrytext,chipId);    
+    eewbyte(unicode,encrytext,12);      
     #endif
-  //////////  
     #ifdef  CheckUnicode
-    chipId = ESP.getEfuseMac();    
+    uint64_t chipId = ESP.getEfuseMac();    
     byte tc;
-    eerbyte(unicodeE,comparetext,12);
-    encrypt(encrytext,chipId,0);        
+    eerbyte(unicode,comparetext,12);
+    encrypt(encrytext,chipId);        
     for(tc=0;tc<12;tc++)
       {if(encrytext[tc]!=comparetext[tc])
         break;
       }    
     if(tc<12)
-       Serial.println("MCU Unicode not match");
+       Serial.println("Unicode not match");
     else
-       Serial.println("MCU Unicode match");    
+       Serial.println("Unicode match");    
     #endif
-  /////////  
   timeClient.begin(); 
   Serial.println("WiFi connected");
   Serial.print("Donkey Lab PLC Ready! Go to: http://");  
-  Serial.print(WiFi.localIP());    
-  Serial.println(":8088/lan");  
+  Serial.println(WiFi.localIP());    
   // Start streaming web server
   starthttpServer();            
   eepromread(adddataz0,dataz0,0);     
@@ -663,7 +624,7 @@ void setup(){
   Serial.print("phonepw = ");
   Serial.println(Storephonepw);
   eerbyte(editpw,Storeeditpw,8); 
-  Serial.print("PLC PW  = ");
+  Serial.print("PLC_PW  = ");
   Serial.println(Storeeditpw);
   /*
   {byte x,y;
@@ -701,13 +662,37 @@ for(h=1;h<=MaxOut;h++)
   {pinMode(Pinout[h],OUTPUT);                     
   digitalWrite(Pinout[h],HIGH);
   }
-#ifdef MaxIn
 for(h=1;h<=MaxIn;h++)   
   pinMode(Pinin[h],INPUT_PULLUP);             
-#endif  
+}
+
+#ifdef  uart1
+void SerialRTXLoop(char* buffer,byte length)
+{length=length+1;
+STXbuffer[0]=0x5a;
+Srxcount=0;
+Serial1.write(STXbuffer,length);
 }
 
 
+uint16_t uartmaster(int length)     //master
+{byte rxd;
+length=length+1;
+int y;
+for(y=0;y<50000;y++)  
+  {if (Serial1.available() && Srxcount<=length) {   
+      rxd=Serial1.read();
+      if(Srxcount==0 && rxd==0x5a) Srxcount=0;
+      SRXbuffer[Srxcount] = rxd;         
+      Serial.print(SRXbuffer[Srxcount],DEC);
+      Srxcount++;       
+      if(Srxcount>=length)          
+      break;
+      }  
+  }  
+  return y;  
+}
+#endif
 //byte test=0;
 //unsigned long timeinsecond;
 //unsigned long timeDayofYear;
@@ -717,7 +702,7 @@ void loop() {
   //  {phoneelapsedTime=millis()-phonestartTime;  
   //  if(phoneelapsedTime>60000)
   //    ctlpermit=0;
-  //  } 
+  //  }
   if(Runmode==2)
     {Serial.println("IO init 2");  
       downloadinit(); 
@@ -736,10 +721,11 @@ void loop() {
       Runmode=1;
       }
     if((realtimeloop&0x1fff)==0x1fff)  
-      {connectToMqtt();                  
+      {     
+      connectToMqtt();
       }  
     if((realtimeloop&0xffff)==0xffff)  //0xffff
-      {esp_task_wdt_reset();     //rest wdt                    
+      {esp_task_wdt_reset();                         
       if(wificonnected)// && (test<5 || test>10))
         {timeClient.update();                        
         //get time details

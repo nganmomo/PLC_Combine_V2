@@ -1,12 +1,31 @@
 static const char PROGMEM INDEX_HTML_mobile[] = R"rawliteral(
 <!DOCTYPE html>
-<body>
-<div id=mobilekey></div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'></script>
+<body><div id=mobilekey></div>
+
+  <h2 id='UTLI4'></h2>
+  <div class="qr" id='qrcode4'></div><br><br>
+    
+  <div id=mobilekey1></div>  
+
+  <h2 id='UTLI2'></h2>
+  <div class="qr" id='qrcode2'></div><br><br>
+  
+  <div id=mobilekey2></div> 
+  
+  <h2 id='UTLI1'></h2>
+  <div class="qr" id='qrcode1'></div><br><br>
+
+  <div id=mobilekey3></div> 
+  <h2 id='UTLI3'></h2>
+  <div class="qr" id='qrcode3'></div><br><br>
+  
+  <div id=mobilekey4></div> 
 </body>
 <script>
 let mxsetdev=6;
 let mysetdev=8;
-
+var URL="";
 //var rowtext = Array.from(Array(mxsetdev), () => new Array(mysetdev)); 
 var rowtext = Array.from(Array(6), () => new Array(8)); 
 var mcell = new Array(48);
@@ -25,11 +44,11 @@ for(var t=7;t<55;t++)
   ktext=document.getElementById('rmtt'+t).value;  
   txdata=txdata+ktext+"@";
   }
-//let txdata1="*^^"+document.getElementById('mqtopic').value+'@';
+let txdata1="*^^"+document.getElementById('mqtopic').value+'@';
 let txdata2="*$^"+mxsetdev+mysetdev+'@';    
-//let txdata3="*^*"+document.getElementById('phpw').value+'@';  
-//let txdata4="*$*"+document.getElementById('editpw').value+'@';  
-txdata=txdata+txdata2;//txdata1+txdata3+txdata4;
+let txdata3="*^*"+document.getElementById('phpw').value+'@';  
+let txdata4="*$*"+document.getElementById('editpw').value+'@';  
+txdata=txdata+txdata1+txdata2+txdata3+txdata4;
 length= txdata.length; 
 if(length<350)
   {xhtp.open("GET","http://"+URL+"/action?go=" + txdata, true);   
@@ -60,59 +79,52 @@ function toggleCheckbox() {
 xhr.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {     
     if(this.responseText[3]=='R')
-      {if(this.responseText[4]==='#' && this.responseText[5]==='#')
-        {loaddefaultA();            
-        localStorage.removeItem('plcdata'); 
-        console.log('localStorage.removeItem2');        
-        }
-      else
-        {let j=0;
-        for(j=4;j<this.responseText.length;j++)
-          {if(this.responseText[j]=='@' && k<55)// && this.responseText[j+2]=='%')
-            {document.getElementById('rmtt'+k).value=keyv;               
-            k++;
-            keyv="";                 
-            }   
-          else    
-            keyv=keyv+this.responseText[j];        
-          //password                           
-          if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='^')  
-            {let phpval="";
-            for(let t=3;t<35;t++)
-                {phpval=phpval+this.responseText[j+t];
-                if(this.responseText[j+t]==='@')
-                  break;
-                }
-            //document.getElementById('mqtopic').value=phpval;  
-            //localStorage.setItem('stmqtopic',phpval);                       
-            }       
-          if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='^')  
-            {mxsetdev=this.responseText[j+3];
-            mysetdev=this.responseText[j+4];                    
-            updaterowscols(1);              
-            }         
-          if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='*')  
-            {let phpval="";
-            for(let t=3;t<11;t++)
-                {phpval=phpval+this.responseText[j+t];
-                if(this.responseText[j+t]==='@')
-                  break;
-                }
-            document.getElementById('phpw').value=phpval;   
-            localStorage.setItem('stmpwapw',phpval);           
-            }
-          if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='*')  
-            {let phpval="";
-            for(let t=3;t<11;t++)
-                {phpval=phpval+this.responseText[j+t];
-                if(this.responseText[j+t]==='@')
-                  break;
-                }
-            //document.getElementById('editpw').value=phpval;                        
-            break;
-            }                           
+      {let j=0;
+      for(j=4;j<this.responseText.length;j++)
+        {if(this.responseText[j]=='@' && k<55)// && this.responseText[j+2]=='%')
+          {document.getElementById('rmtt'+k).value=keyv;               
+          k++;
+          keyv="";                 
           }   
-        }
+        else    
+          keyv=keyv+this.responseText[j];        
+        //password                           
+        if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='^')  
+          {let phpval="";
+          for(let t=3;t<35;t++)
+              {phpval=phpval+this.responseText[j+t];
+              if(this.responseText[j+t]==='@')
+                break;
+              }
+          document.getElementById('mqtopic').value=phpval;  
+          localStorage.setItem('stmqtopic',phpval);                       
+          }       
+        if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='^')  
+          {mxsetdev=this.responseText[j+3];
+          mysetdev=this.responseText[j+4];                    
+          updaterowscols(1);              
+          }         
+        if(this.responseText[j]==='*' && this.responseText[j+1]==='^' && this.responseText[j+2]==='*')  
+          {let phpval="";
+          for(let t=3;t<11;t++)
+              {phpval=phpval+this.responseText[j+t];
+              if(this.responseText[j+t]==='@')
+                break;
+              }
+          document.getElementById('phpw').value=phpval;   
+          localStorage.setItem('stmpwapw',phpval);           
+          }
+        if(this.responseText[j]==='*' && this.responseText[j+1]==='$' && this.responseText[j+2]==='*')  
+          {let phpval="";
+          for(let t=3;t<11;t++)
+              {phpval=phpval+this.responseText[j+t];
+              if(this.responseText[j+t]==='@')
+                break;
+              }
+          document.getElementById('editpw').value=phpval;                        
+          break;
+          }                           
+        }   
       }
     if(this.responseText[3]=='o')
       {
@@ -139,8 +151,8 @@ function makeid(length) {
 function GererateRC(type)
 {if(type===1)
 document.getElementById('phpw').value=makeid(8);
-//if(type===2)
-//document.getElementById('editpw').value=makeid(8);
+if(type===2)
+document.getElementById('editpw').value=makeid(8);
 if(type===3)
 document.getElementById('mqtopic').value=makeid(32);
 }
@@ -149,23 +161,17 @@ document.getElementById('mqtopic').value=makeid(32);
 ///////////////////////////////////////////////////////
 function loaddefaultA()
 {//loadkeytable2();
-const words = ['A', 'B', 'C', 'D', 'E'];
 for(var t=1;t<=8;t++)
   {for(var j=1;j<=6;j++)
     {if(j<6)
-        document.getElementById('rmtt'+(j+t*6)).value=words[j-1]+t;                   
+        document.getElementById('rmtt'+(j+t*6)).value=t;   
       else  
         document.getElementById('rmtt'+(j+t*6)).value=100;              
     }
   } 
-
-mysetdev=2;
-mxsetdev=2;
-updaterowscols(1);
 document.getElementById('phpw').value="1a2b3c4d"; 
-//document.getElementById('editpw').value="a1b2c3d4"; 
-document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";    
-Uploadremotekey();                   
+document.getElementById('editpw').value="a1b2c3d4"; 
+document.getElementById('mqtopic').value="O0hVYjnHmd6yOLJQWrSrykhAY3CzpE33";                       
 }
 
 function loaddefaultB()
@@ -180,7 +186,7 @@ for(var t=1;t<=8;t++)
     }
   }  
 document.getElementById('phpw').value="30f5C7zR"; 
-//document.getElementById('editpw').value="6FfeAq4a"; 
+document.getElementById('editpw').value="6FfeAq4a"; 
 document.getElementById('mqtopic').value="nOFbQgD9gNQ5KkCbp8sewbZzVbuD8oWq";          
 }
 
@@ -261,8 +267,8 @@ function loadkeytable2(){
 
 
 var mobilekey=
-"<h3>Step 1:Set lock switch in unlock position</h3>\
-<h3>Step 2 : Input keypad character, row and column number</h3>\
+"<h3>Step 1:To unlack this setup, in PLC, set the PARAMETER setup switch to ON postion and press reset</h3>\
+<h3>Step 2 : Input keypad character, row and column number, please defaultA or defualtB</h3>\
 <h3>and than edit the necessory value, press upload when done</h3>\
 <table class='devtable'><tbody>\
 <tr id='myDRow0'></tr><tr id='myDRow1'></tr><tr id='myDRow2'></tr><tr id='myDRow3'>\
@@ -290,12 +296,8 @@ var mobilekey=
 <button type='button' class='mkey' onclick='loadkeytable1()' style='margin-left:50px'>Refresh or cancel input</button>\
 <button type='button' class='mkey' onclick='loaddefaultA()' style='margin-left:50px'>Load default A</button>\
 <button type='button' class='mkey' onclick='loaddefaultB()' style='margin-left:50px'>Load default B</button>\
-<button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
-<h4>FOR LAN PHONE, NO PASSWORD REQUIRED</h4>\
-<h4>FOR MQTT PHONE, USE TOPIC 32 character AS PASSWORD</h4>\
-<h3>Step 3 GO to MQTT setup to get the PCODE and continue</h3>"
-/*
-input class='rmtt' id='phpw' maxlength='8' type='text' value='1A3B5C7D' style='width:150px;height:22px;margin-left:120px'></td>\
+<h4>Setup password for phone control, any 8 character</h4>\
+<input class='rmtt' id='phpw' maxlength='8' type='text' value='1A3B5C7D' style='width:150px;height:22px;margin-left:120px'></td>\
 <button type='button' id='grc' onclick='GererateRC(1)' style='margin-left:10px'>***Gererate random code</button>\
 <button type='button' id='grc' onclick='GererateRC(2)' style='margin-left:10px'>***Gererate random code</button>\
 <h4>Setup random topic for mqtt, any 32 character</h4><button onclick='copyToClipboard()' style='margin-left:150px'>Copy to Clipboard</button><br><br>\
@@ -303,16 +305,43 @@ input class='rmtt' id='phpw' maxlength='8' type='text' value='1A3B5C7D' style='w
 <button type='button' id='grc' onclick='GererateRC(3)' style='margin-left:10px'>***Gererate random code</button>\
 <button type='button' class='mkey' onclick='Uploadremotekey()' style='margin-left:50px'>Upload setup</button><br>\
 <h3>Step 3: Assign the function of each key in the EDITPAGE</h3>\
-<h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"*/
+<h3>Step 4: Use he link below, Scan the QR code below, create a PWA app in phone.</h3>"
+var mobilekey1=
+"<h3>Step 5:Input password for editpage online, get the code by scan the below QRCODE"   
+var mobilekey2=
+"<h3>Step 6:Input MQTT UNIQUE CODE, get the code by scan the follow QRCODE"     
+var mobilekey3=
+"<h3>Step 7:The link belew, if not open firewall in router, it just work on LOCAL AREA NETWORK</h3>"
+"<h3>The link work on http protocol, setup mqtt unique is not required</h3>"
+var mobilekey4=
+"<h4>When setup completed, return the setup switch to normal position. If firewall not open, you can ignore password</h4>"
 
-window.onload = async function(){         
-  //URL="192.168.1.95:8088";
-  URL=window.location.host;  
-  console.log(URL);
+window.onload = async function(){       
+  URL=window.location.host; 
+  //URL="192.168.1.84:8088";
   console.log('11ter',mcell);  
-  document.getElementById('mobilekey').innerHTML=mobilekey;     
+  document.getElementById('mobilekey').innerHTML=mobilekey;   
+  document.getElementById('mobilekey1').innerHTML=mobilekey1;   
+  document.getElementById('mobilekey2').innerHTML=mobilekey2;
+  document.getElementById('mobilekey3').innerHTML=mobilekey3;
+  document.getElementById('mobilekey4').innerHTML=mobilekey4;
   loadkeytable(); 
 }
+
+var MQqrcode = new QRCode('qrcode4','https://ipcworld.w3spaces.com/index.html');
+document.getElementById('UTLI4').innerText='https://ipcworld.w3spaces.com/SVGPLC/pwaphwss.html';
+
+let valtp=localStorage.getItem('stmqtopic');  
+var qrcode = new QRCode('qrcode1',valtp);
+document.getElementById('UTLI1').innerText=valtp; 
+
+let valpw=localStorage.getItem('stmpwapw');  
+var qrcode = new QRCode('qrcode2',valpw);
+document.getElementById('UTLI2').innerText=valpw; 
+
+var qrcode = new QRCode('qrcode3',window.location.host);
+document.getElementById('UTLI3').innerText=window.location.host; 
+
 </script>
 <style>
 body

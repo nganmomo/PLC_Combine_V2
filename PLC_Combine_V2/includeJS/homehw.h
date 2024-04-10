@@ -1,33 +1,49 @@
-static const char PROGMEM INDEX_HTML_homeweb[] = R"rawliteral(
+static const char PROGMEM INDEX_HTML_homehw[] = R"rawliteral(
 <!DOCTYPE html>
 <head>
 <title>Network Programmable Logic control</title>
 </head>
 
 <!--Begin of selection -->
+<!--
+<link rel="icon" type="image/x-icon" href="http://ipcworld.online/plcweb/views/image/favicon.ico">
+<script src="http://ipcworld.online/plcweb/icontext.js"></script>  
+<script src="http://ipcworld.online/plcweb/svgplccell.js"></script>    
+<script src="http://ipcworld.online/plcweb/Property.js"></script> 
+<script src="http://ipcworld.online/plcweb/Linkhardware.js"></script>
+<script src="http://ipcworld.online/plcweb/helppopup.js"></script> 
+<link rel="stylesheet" href="http://ipcworld.online/plcweb/css/plcsvg.css">      
+-->
+<!--
+<link href='http://ipcworld.online/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
+<script src="icontext.js"></script> 
+<script src="svgplccell.js"></script>     
+<script src="Property.js"></script>    
+<script src="Linkhardware.js"></script>   
+<script src="helppopup.js"></script>      
+<link rel="stylesheet" href="css/plcsvg.css">  
+-->
 
-link rel="icon" type="image/x-icon" href="https://ipcworld.w3spaces.com/SVGPLC/images/favicon.ico">
-<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/icontext.js"></script>  
-<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/svgplccell.js"></script>    
-<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Property.js"></script> 
-<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/Linkhardware.js"></script>
-<script src="https://ipcworld.w3spaces.com/SVGPLC/PLC/helppopup.js"></script> 
-<link rel="stylesheet" href="https://ipcworld.w3spaces.com/SVGPLC/PLC/css/plcsvg.css"      
-
+<link href='http://ipcworld.online/favicon.ico' type='image/x-icon' rel='shortcut icon'/>
+<script src="icontext"></script> 
+<script src="svgplccell"></script>     
+<script src="Property"></script>    
+<script src="Linkhardware"></script>   
+<script src="helppopup"></script>      
+<link rel="stylesheet" href="plcsvgcss">  
 
 <!--End of selection -->
 <script>
 //var tryonline=1;      //Require hardware
 var tryonline=0;    //Not require hardware
-var mqupdate=0;
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
 
-<div class="navbar">     
-    <button style="margin-left:25px" onclick="history.back()">HOME</button>
-    <button type="button" class="botstatus" id="botstatus" onclick="CheckHWStatus(0)" >STATUS</button>   
+<div class="navbar">      
+    <button style="margin-left:25px" onclick="history.back()">Exit</button>
+    <button type="button" class="botstatus" id="botstatus" onclick="CheckHWStatus(0)" >Network</button>   
     <button type="button" class="plcedit" id="plcedit" onclick="showedit(1)" >Edit page</button>   
     <button type="button" class="botcl" onclick="clearfile()" >clear</button>    
     <button type="button" class="botsim" onclick="uploadesp('swur',0)" >Probe</button> 
@@ -47,7 +63,12 @@ var mqupdate=0;
       <div class="container" id="hintscont">
       <div id="HINTS"></div>               
       </div>   
-    </div>  
+    </div>
+    <!--a href="#">homehw</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a-->
 </div>
 
 <!-- Page Content -->
@@ -73,20 +94,19 @@ var mqupdate=0;
 
 
 <script>
-//var tryonline=0;
-var systemtype=1;
-//var systemtype=1;   //use esp32 internal file
-//var URL="192.168.1.95:8088";
+var tryonline=0;  
+//var systemtype=0;     //use computer file for debug
+var systemtype=1;   //use esp32 internal file
+//var URL="192.168.1.84:8088";
 var URL=window.location.host; 
 var Showtable = "";
 var divc1 = document.getElementById('piccont'); 
 var divc2 = document.getElementById('tablecont'); 
 divc1.addEventListener('contextmenu', (e) => {e.preventDefault()});   
 divc2.addEventListener("contextmenu", (e) => {e.preventDefault()});   
-window.onload = async function(){   
-  //CheckHWStatus(2); 
-  CheckHWStatus(1);      
-  //Sceret=1;  //bypass login no effect
+window.onload = async function(){         
+  //CheckHWStatus('MCC'); //comment to bypass login
+  Sceret=1;  //uncomment to bypass login
   ////////////////
   updatacell();  
   try

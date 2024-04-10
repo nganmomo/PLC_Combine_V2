@@ -84,15 +84,13 @@ byte cellkeyboard(byte work)    //kin or display
 byte y; 
 byte Len=0;     //process request  
 byte ret=0;
-Serial.print("work=");  
-Serial.println(work);  
 if(work==VERIFY)
 {
 #ifdef  chphpw
-  {Serial.print("variable[6]=");
-  Serial.println(&variable[6]);
-  Serial.print("Storephonepw=");
-  Serial.println(Storephonepw);    
+  {//Serial.print("variable[6]=");
+  //Serial.println(&variable[6]);
+  //Serial.print("Storephonepw=");
+  //Serial.println(Storephonepw);  
   for(y=0;y<10;y++)
     {if(variable[y+6]!=Storephonepw[y])
       break;
@@ -114,7 +112,7 @@ if(work==VERIFY)
 #endif 
 variable[3]='d';    //display required   
 }
-if(work==DWORK && ctlpermit==1)
+if(work==DWORK)
   {buttonnum=variable[4]-0x30; //0-8 Y
   buttonmode=variable[5]-0x30; //0-5 X     
   Rbuttonnum=variable[4]-0x30; //0-8 Y
@@ -141,7 +139,7 @@ if(work==DPLAY)
     displaymess=displaymess+kmodeC+'/'+knum+')';  
     }
   else
-    displaymess="Verify_ID";  //when using 2nd pw                               
+    displaymess="Verify ID";  //when using 2nd pw                               
   }         
 return 0;
 }   
@@ -243,8 +241,8 @@ void systemsetup()
     variable[3]='U';        
     }
   if(variable[3]=='D')  
-    {numchartowrite=500; 
-    eerbyte(MQSTdata,variable,500); //add unitcode
+    {numchartowrite=500;
+    eerbyte(MQSTdata,variable,500);
     variable[3]='D';
     }   
   //for time clock
@@ -259,12 +257,9 @@ void systemsetup()
     eerbyte(timeclock,variable,500);
     variable[3]='D';
     }           
-variable[0]='m'; 
-variable[1]='Q'; 
-variable[2]='s'; 
+variable[0]='m';   
 mqttrun=1;      
 }    
-
 byte clkid[17];
 int32_t setbt[17];
 int32_t setet[17];
@@ -478,54 +473,14 @@ else
 } 
 
 
-void encrypt(char* text,uint64_t chipId,byte type)
-{byte lookup0[32]={'1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6','e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p'};
-byte lookup1[32]={'e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p','1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6'};
+void encrypt(char* text,uint64_t chipId)
+{byte lookup[32]={'1','f','Z','O','Y','g','2','n','m','h','3','I','x','L','l','6','e','9','5','4','J','c','M','0','b','d','8','7','k','a','O','p'};
 byte shiftup[32]={5,1,2,3,6,7,8,0,9,5,4,1,2,3,8,7,6,0,9,4,5,1,2,7,6,1,8,0,9,4};
 uint64_t X=((chipId*773/612)*293);
 for(byte i=0;i<12;i++)
   { 
   text[i]=X & 0x1f; 
   X=X>>2;
-  if(type==1)
-    text[i]=lookup1[text[i]];
-  else
-    text[i]=lookup0[text[i]];
+  text[i]=lookup[text[i]];
   } 
 }
-
-void loaddefaultvalue()
-{char cleardata[6] = {'#','#','#','#','#','#'};  //600 
-eewbyte(timeclock,cleardata,6);
-eewbyte(MQSTdata,cleardata,6);
-eewbyte(keychar,cleardata,6);
-Serial.println("loaddefault");
-}
-
-#ifdef  uart1
-void SerialRTXLoop(char* buffer,byte length)
-{length=length+1;
-STXbuffer[0]=0x5a;
-Srxcount=0;
-Serial1.write(STXbuffer,length);
-}
-
-
-uint16_t uartmaster(int length)     //master
-{byte rxd;
-length=length+1;
-int y;
-for(y=0;y<50000;y++)  
-  {if (Serial1.available() && Srxcount<=length) {   
-      rxd=Serial1.read();
-      if(Srxcount==0 && rxd==0x5a) Srxcount=0;
-      SRXbuffer[Srxcount] = rxd;         
-      Serial.print(SRXbuffer[Srxcount],DEC);
-      Srxcount++;       
-      if(Srxcount>=length)          
-      break;
-      }  
-  }  
-  return y;  
-}
-#endif
